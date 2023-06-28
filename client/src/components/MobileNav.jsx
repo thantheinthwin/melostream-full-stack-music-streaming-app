@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useStateValue } from '../../context/StateProvider'
+import { useStateValue } from '../context/StateProvider'
 
 import { BiHomeAlt } from 'react-icons/bi'
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai'
 import { MdOutlineAttachMoney, MdFavorite } from 'react-icons/md'
-import { isActiveMobileNav, isNotActiveMobileNav } from '../../utils/styles'
+import { isActiveMobileNav, isNotActiveMobileNav } from '../utils/styles'
 
 const MobileNav = () => {
     const [{user}, dispatch] = useStateValue();

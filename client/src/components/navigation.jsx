@@ -28,6 +28,8 @@ const Navigation = (props) => {
   const role = user?.user?.role;
   const user_id = user?.user?.user_id;
 
+  const defaultImageURL = 'https://firebasestorage.googleapis.com/v0/b/mcc-music-web-project.appspot.com/o/images%2Fdefault%2Fprofile.webp?alt=media&token=97a1ef47-11ea-42ee-b397-3afb9f7aac75';
+
   let userIcon ;
 
   // Admin access
@@ -145,7 +147,7 @@ const Navigation = (props) => {
               {userIcon}
             </div>     
           </div>     
-          <img src={user?.user?.imageURL} alt="profile pic" referrerPolicy='no-referrer' className='w-12 min-w-[44px] rounded-lg object-cover shadow-lg filter hover:contrast-75'/>
+          <img src={user?.user?.imageURL !== null ? user?.user?.imageURL : defaultImageURL} alt="profile pic" referrerPolicy='no-referrer' className='w-12 min-w-[44px] rounded-lg object-cover shadow-lg filter hover:contrast-75'/>
           {isMenu && (
             <motion.div 
             initial={{opacity : 0, y : -50}} 

@@ -24,7 +24,7 @@ const Login = ({setAuth}) => {
 
   const emailRef = useRef();
 
-  const [{user}, dispatch] = useStateValue();
+  const [dispatch] = useStateValue();
   
   // Logging in with Google Auth using firebase
   const loginWithGoogle = async () => {

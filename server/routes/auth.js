@@ -86,7 +86,7 @@ const newUserData = async (decodeValue, req, res) => {
     const newUser = new user({
         name: decodeValue.name,
         email: decodeValue.email,
-        imageURL: decodeValue.picture || "https://firebasestorage.googleapis.com/v0/b/mcc-music-web-project.appspot.com/o/images%2Fdefault%2Fprofile.webp?alt=media&token=97a1ef47-11ea-42ee-b397-3afb9f7aac75&_gl=1*1a94mbk*_ga*NTEyNjYxMzY4LjE2NzU4NjIwOTI.*_ga_CW55HF8NVT*MTY4NTUxODU3Ni4xOC4xLjE2ODU1MTg4MjUuMC4wLjA.",
+        imageURL: decodeValue.picture || null,
         user_id: decodeValue.user_id,
         password: decodeValue.password || "",
         ph_number: null,

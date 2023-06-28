@@ -4,8 +4,8 @@ import { FaHome } from 'react-icons/fa'
 import { MdWorkspacePremium, MdFavorite } from 'react-icons/md'
 import { BiCloudUpload } from 'react-icons/bi'
 
-import { isActiveStyle, isNotActiveStyle } from '../../utils/styles'
-import { useStateValue } from '../../context/StateProvider'
+import { isActiveStyle, isNotActiveStyle } from '../utils/styles'
+import { useStateValue } from '../context/StateProvider'
 
 const SideBar = () => {
   const [{user}, dispatch] = useStateValue();

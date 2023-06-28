@@ -138,6 +138,21 @@ export const updatePhoneNumber = async (user_id, ph_number) => {
     }
 }
 
+export const updateProfileImage = async (user_id, imageURL) => {
+    try {
+        const res = await fetch(`${baseURL}api/users/updateProfileImage`,{
+            method: 'POST',
+            body: JSON.stringify({
+                uid: user_id,
+                imageURL: imageURL
+            })
+        })
+        return res.data;
+    } catch (error) {
+        return null;
+    }
+}
+
 export const changeAccount = async (user_id) => {
     try {
         const res = await axios.get(`${baseURL}api/users/changeAccountType/${user_id}`)

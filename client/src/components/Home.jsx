@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 
-import { useStateValue } from '../../context/StateProvider'
-import { actionType } from '../../context/reducer';
-
-import { getAllAlbums, getAllArtists, getAllSongs, getAllUsers } from '../../api';
+import { getAllAlbums, getAllArtists, getAllSongs, getAllUsers } from '../api';
+import { useStateValue } from '../context/StateProvider';
+import { actionType } from '../context/reducer';
 
 const Home = () => {
   const [{allUsers, allSongs, allArtists, allAlbums}, dispatch] = useStateValue();

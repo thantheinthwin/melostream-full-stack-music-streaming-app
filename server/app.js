@@ -9,8 +9,9 @@ dotenv.config({path: '.env'});
 const app = express();
 
 app.use(cors({origin: true}));
-app.use(express.json());    // Converting form data into json
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
     return res.json("Hi there....")

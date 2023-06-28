@@ -7,16 +7,24 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 import {AiOutlineInfoCircle} from 'react-icons/ai'
 
-import { removeUser, updatePhoneNumber } from '../../api';
-import { actionType } from '../../context/reducer';
-import { useStateValue } from '../../context/StateProvider';
+import { removeUser, updatePhoneNumber, updateProfileImage } from '../api';
+import { actionType } from '../context/reducer';
+import { useStateValue } from '../context/StateProvider';
 
-import { app } from '../../config/firebase.config';
+import { app, storage } from '../config/firebase.config';
 import { deleteUser as deleteAuthUser, getAuth, sendEmailVerification, updatePassword } from '@firebase/auth';
+import { v4 } from 'uuid';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const Profile = (props) => {
     const {open, handleClose} = props;
     const [{user}, dispatch] = useStateValue();
+    const [image, setImage] = useState(null);
+
+    useEffect(()=>{
+      setImage(user?.user?.imageURL);
+      // console.log('Image: ',image)
+    },[])
 
     const navigate = useNavigate();
 
@@ -24,12 +32,26 @@ const Profile = (props) => {
     const email = user?.user?.email;
     const subscription = user?.user?.subscription;
     const role = user?.user?.role;
-    const imageURL = user?.user?.imageURL;
     const phnumber = user?.user?.ph_number;
     const email_verified = user?.user?.email_verified;
     const _id = user?.user?._id;
     const user_id = user?.user?.user_id;
 
+    const defaultImageURL = 'https://firebasestorage.googleapis.com/v0/b/mcc-music-web-project.appspot.com/o/images%2Fdefault%2Fprofile.webp?alt=media&token=97a1ef47-11ea-42ee-b397-3afb9f7aac75';
+    const uploadImage = async () => {
+      if(image == null) return;
+      const filename = image.name + v4();
+      const imageRef = ref(storage, `images/user/${filename}`);
+
+      uploadBytes(imageRef, image)
+      .then(() => {
+        console.log('Image uploaded');
+        getDownloadURL(imageRef)
+        .then((url) => {
+          console.log('Url: ', url);
+        })
+      }).catch((error) => console.error(error))
+    }
     // console.log(user);
 
     const firebaseAuth = getAuth(app);
@@ -118,19 +140,32 @@ const Profile = (props) => {
       })
     }
 
+    const getImage = (e) => {
+      const fileItem = e.target.files[0];
+      setImage(fileItem);
+      // console.log("img:", fileItem?.name + v4());
+    }
+
     return (
       <AnimatePresence>
         {open && <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{type: 'spring', duration: 0.5}} className='absolute z-50 w-screen h-screen bg-black bg-opacity-50'>
           <motion.div initial={{opacity: 0, scale: 0.5}} animate={{opacity: 1, scale: 1}} exit={{opacity: 0, scale: 0.5}} transition={{type: 'spring', duration: 0.5}} className='fixed rounded-md top-0 bottom-0 left-0 right-0 grid gap-4 p-5 m-auto overflow-x-hidden overflow-y-auto bg-neutral-900 w-[calc(100%-1rem)] md:w-96 h-fit'>
             <div className='flex items-center justify-between'>
               <p className='text-3xl font-bold text-accent'>Profile</p>
-              <i className='text-xl text-white rounded-full hover:bg-neutral-700' onClick={()=>{handleClose()}}><IoCloseOutline/></i>
+              <i className='text-xl text-white rounded-full hover:bg-neutral-700' onClick={()=>{uploadImage().then(()=>{handleClose()})}}><IoCloseOutline/></i>
             </div>
             <div className='grid gap-2'>
-              <div className='relative'>
-                <img src={imageURL} alt="profile pic" className='w-24 rounded-lg'/> 
-                
-              </div>
+              <label htmlFor='dropzone-file' className='relative w-fit'>
+                <div className='absolute flex flex-col-reverse w-full h-full text-center transition-all duration-200 ease-in-out rounded-lg opacity-0 bg-zinc-700 bg-opacity-30 hover:opacity-100'><span className='rounded-b-lg bg-zinc-600'>edit</span></div>
+                <img src={image ? URL.createObjectURL(image) : defaultImageURL} alt="profile pic" className='object-cover w-20 h-20 rounded-lg md:w-32 md:h-32' /> 
+                <form method='POST'>
+                  <input id='dropzone-file' type='file' accept='image/*' className='hidden' onChange={(e)=>getImage(e)}/> 
+                </form>
+              </label>
+              {/* <div className='relative'>
+                <img src={image ? URL.createObjectURL(image) : imageURL} alt="profile pic" className='object-cover w-24 h-24 rounded-lg' /> 
+                <input type='file' accept='image/*' className='hidden' onChange={(e)=>getImage(e)}/>
+              </div> */}
               <p className='font-medium'>Username</p>
               <p className='font-light'>{username}</p>
               <p className='font-medium'>Email</p>
