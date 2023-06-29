@@ -20,7 +20,6 @@ const Profile = (props) => {
     const {open, handleClose} = props;
     const [{user}, dispatch] = useStateValue();
     const [image, setImage] = useState(null);
-    const [isImageLoading, setImageLoading] = useState(false);
 
     useEffect(()=>{
       setImage(user?.user?.imageURL);
@@ -57,6 +56,13 @@ const Profile = (props) => {
         getDownloadURL(imageRef)
         .then((url) => {
           console.log('Url: ', url);
+          updateProfileImage({uid: user_id, imageURL: url})
+          .then((data) => {
+            dispatch({
+              type: actionType.SET_USER,
+              user: data.user
+            })
+          })
         })
       }).catch((error) => console.error(error))
     }
@@ -157,12 +163,10 @@ const Profile = (props) => {
               <i className='text-xl text-white rounded-full hover:bg-neutral-700' onClick={()=>{uploadImage().then(()=>{handleClose()})}}><IoCloseOutline/></i>
             </div>
             <div className='grid gap-2'>
-              <label htmlFor='dropzone-file' className='relative w-fit'>
+              <label htmlFor='profile' className='relative w-fit'>
                 <div className='absolute flex flex-col-reverse w-full h-full text-center transition-all duration-200 ease-in-out rounded-lg opacity-0 bg-zinc-700 bg-opacity-30 hover:opacity-100'><span className='rounded-b-lg bg-zinc-600'>edit</span></div>
                 <img src={image ? URL.createObjectURL(image) : defaultImageURL} alt="profile pic" className='object-cover w-20 h-20 rounded-lg md:w-32 md:h-32' /> 
-                <form method='POST'>
-                  <input id='dropzone-file' type='file' accept='image/*' className='hidden' onChange={(e)=>getImage(e)}/> 
-                </form>
+                <input id='profile' type='file' accept='image/*' className='hidden' onChange={(e)=>getImage(e)}/> 
               </label>
               {/* <div className='relative'>
                 <img src={image ? URL.createObjectURL(image) : imageURL} alt="profile pic" className='object-cover w-24 h-24 rounded-lg' /> 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useStateValue } from '../context/StateProvider'
 import { actionType } from '../context/reducer';
 
-import { getAllSongs } from '../api';
+import { addSong, getAllSongs } from '../api';
 import { SongCard } from './Cards';
 
 import { getAuth } from '@firebase/auth';
@@ -14,6 +14,7 @@ import { v4 } from 'uuid';
 import { MdOutlineDelete } from 'react-icons/md'
 
 import { deleteFileObject } from './supportFunctions';
+import { useNavigate } from 'react-router-dom';
 
 const Upload = () => {
   const [{user, allSongs}, dispatch] = useStateValue();
@@ -37,6 +38,7 @@ const Upload = () => {
   })
   
   // console.log(userData);
+  const navigate = useNavigate();
 
   var popularGenres = [
     "Pop",
@@ -55,6 +57,42 @@ const Upload = () => {
     const newData = {...userData}
     newData[e.target.id] = e.target.value
     setUserData(newData)
+  }
+
+  const saveSong = () => {
+    if (!image || !song){
+
+    } else {
+      setImageLoading(true);
+      setSongLoading(true);
+
+      const data = {
+        name: userData.title,
+        imageURL: image,
+        songURL: song,
+        album: userData.album,
+        artist: user?.user?.name,
+        language: userData.language,
+        genre: userData.genre,
+      }
+
+      addSong(data).then((res) => {
+        getAllSongs()
+        .then((songs) => {
+          dispatch({
+            type: actionType.SET_ALL_SONGS,
+            allSongs: songs.song
+          })
+          navigate('/')
+        })
+      })
+
+      setSong(null);
+      setSongLoading(false);
+      setImage(null);
+      setImageLoading(false);
+      setUserData(null);
+    }
   }
   
   useEffect(()=>{
@@ -78,9 +116,6 @@ const Upload = () => {
   
   return (
     <div className='grid w-full grid-flow-row grid-cols-8 gap-2 p-2 h-fit max-h-[calc(100vh-7rem)] overflow-y-scroll pb-5'>
-      {(allSongs && user) && <div className='p-2 text-sm font-semibold text-gray-400 border rounded-md col-span-full'>
-        You have uploaded {allSongs.filter(song => song.artist === user.user?.name).length} songs.
-      </div>}
       <form className='grid grid-cols-3 gap-4 p-2 rounded-md col-span-full bg-secondary'>
         <p className='font-medium uppercase col-span-full'>Upload</p>
         <div className='flex flex-col gap-5 col-span-full md:col-span-1'>
@@ -92,6 +127,7 @@ const Upload = () => {
               placeholder="title"
               value={userData.title}
               onChange={(e)=>handle(e)}
+              required
               className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
             ></input>
             <label
@@ -109,6 +145,7 @@ const Upload = () => {
               placeholder="album"
               value={userData.album}
               onChange={(e)=>handle(e)}
+              required
               className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
             ></input>
             <label
@@ -126,6 +163,7 @@ const Upload = () => {
               placeholder="language"
               value={userData.language}
               onChange={(e)=>handle(e)}
+              required
               className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
             ></input>
             <label
@@ -150,19 +188,32 @@ const Upload = () => {
               setProgress={setImageUploadProgress} 
               isLoading={setImageLoading} 
               isImage={true}
+              id={'image'}
             /> : 
             <div className='relative flex flex-col items-center justify-center w-full h-full bg-transparent border-2 border-gray-300 border-dashed rounded-lg cursor-default'>
-              <img src={image} className='object-center w-52 h-52' alt="uploaded-file" />
-              <button type='button' className='absolute bottom-0 right-0 p-2 m-3 text-2xl transition-all duration-200 ease-in-out bg-red-600 rounded-full filter hover:bg-red-700' onClick={()=>deleteFileObject(image).then(()=>{setImage(null)})}><MdOutlineDelete/></button>
+              <img src={image} className='object-cover w-52 h-52' alt="uploaded-file" />
+              <button type='button' className='absolute bottom-0 right-0 p-2 m-3 text-2xl transition-all duration-200 ease-in-out bg-red-600 rounded-full filter hover:bg-red-700' onClick={()=>{setImageLoading(true); deleteFileObject(image).then(()=>{setImage(null); setImageLoading(false)})}}><MdOutlineDelete/></button>
             </div>}</>)}
 
           {/* Audio Upload */}
-
-
+          {isSongLoading && <FileLoader progress={songUploadProgress}/>}
+          {!isSongLoading && (
+            <>
+              {!song ? <FileUploader 
+              updateState={setSong} 
+              setProgress={setSongUploadProgress} 
+              isLoading={setSongLoading} 
+              isImage={false}
+              id={'audio'}
+            /> : 
+            <div className='relative flex flex-col items-center justify-center w-full h-full py-6 bg-transparent border-2 border-gray-300 border-dashed rounded-lg cursor-default'>
+              <audio controls><source src={song} alt="uploaded-file" type='audio/mpeg'/></audio>
+              <button type='button' className='absolute bottom-0 right-0 p-2 m-3 text-2xl transition-all duration-200 ease-in-out bg-red-600 rounded-full filter hover:bg-red-700' onClick={()=>{setSongLoading(true); deleteFileObject(song).then(()=>{setSong(null); setSongLoading(false)})}}><MdOutlineDelete/></button>
+            </div>}</>)}
         </div>
         <div className='flex flex-row-reverse gap-2 col-span-full'>
-          <button className='p-2 text-black rounded-md bg-primary'>Save</button>
-          <button className='p-2 text-black bg-red-600 rounded-md'>Reset</button>
+          <button className='p-2 text-black rounded-md bg-primary' type='button' onClick={()=>{saveSong()}}>Save</button>
+          <button className='p-2 text-black bg-red-600 rounded-md' type='button' onClick={()=>{}}>Reset</button>
         </div>
       </form>
     </div>
@@ -198,7 +249,8 @@ export const FileUploader = ({
   updateState,
   setProgress,
   isLoading,
-  isImage
+  isImage,
+  id
 }) => {
 
   const uploadFile = (e) => {
@@ -230,7 +282,7 @@ export const FileUploader = ({
 
   return (
     <label
-      htmlFor="dropzone-file"
+      htmlFor={id}
       className="flex flex-col items-center justify-center w-full h-full bg-transparent border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-stone-600 hover:bg-opacity-10"
     >
       <div className="flex flex-col items-center justify-center px-4 py-6 bg-transparent">
@@ -259,7 +311,7 @@ export const FileUploader = ({
           </p>
         }
       </div> 
-      <input id="dropzone-file" type="file" className="hidden" accept={`${isImage ? 'image/*' : 'audio/*'}`} onChange={(e)=>uploadFile(e)}/>
+      <input id={id} type="file" className="hidden" accept={isImage ? 'image/*' : 'audio/*'} onChange={(e)=>{uploadFile(e)}}/>
     </label>
   )
 }

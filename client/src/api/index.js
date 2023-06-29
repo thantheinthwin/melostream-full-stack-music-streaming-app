@@ -102,6 +102,15 @@ export const deleteAuthUser = async (user_id) => {
     }
 }
 
+export const addSong = async (data) => {
+    try {
+        const res = axios.post(`${baseURL}api/songs/save`, {...data});
+        return (await res).data.song;
+    } catch (error) {
+        return null;
+    }
+}
+
 export const removeSong = async (songId) => {
     try {
         const res = await axios.delete(`${baseURL}api/songs/delete/${songId}`);
@@ -138,16 +147,10 @@ export const updatePhoneNumber = async (user_id, ph_number) => {
     }
 }
 
-export const updateProfileImage = async (user_id, imageURL) => {
+export const updateProfileImage = async (data) => {
     try {
-        const res = await fetch(`${baseURL}api/users/updateProfileImage`,{
-            method: 'POST',
-            body: JSON.stringify({
-                uid: user_id,
-                imageURL: imageURL
-            })
-        })
-        return res.data;
+        const res = axios.post(`${baseURL}api/users/updateProfileImage`, {...data});
+        return (await res).data;
     } catch (error) {
         return null;
     }
