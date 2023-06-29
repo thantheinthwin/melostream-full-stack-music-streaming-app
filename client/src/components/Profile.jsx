@@ -20,6 +20,7 @@ const Profile = (props) => {
     const {open, handleClose} = props;
     const [{user}, dispatch] = useStateValue();
     const [image, setImage] = useState(null);
+    const [isImageLoading, setImageLoading] = useState(false);
 
     useEffect(()=>{
       setImage(user?.user?.imageURL);
@@ -38,6 +39,13 @@ const Profile = (props) => {
     const user_id = user?.user?.user_id;
 
     const defaultImageURL = 'https://firebasestorage.googleapis.com/v0/b/mcc-music-web-project.appspot.com/o/images%2Fdefault%2Fprofile.webp?alt=media&token=97a1ef47-11ea-42ee-b397-3afb9f7aac75';
+    
+    const getImage = (e) => {
+      const fileItem = e.target.files[0];
+      setImage(fileItem);
+      // console.log("img:", fileItem?.name + v4());
+    }
+    
     const uploadImage = async () => {
       if(image == null) return;
       const filename = image.name + v4();
@@ -138,12 +146,6 @@ const Profile = (props) => {
       }).catch((error) => {
         console.log(error);
       })
-    }
-
-    const getImage = (e) => {
-      const fileItem = e.target.files[0];
-      setImage(fileItem);
-      // console.log("img:", fileItem?.name + v4());
     }
 
     return (

@@ -190,6 +190,35 @@ router.post('/updatePhoneNumber/:id/:ph_number', async (req, res) => {
     }
 })
 
+// Updating profile image
+router.post('/updateProfileImage', async (req, res) => {
+    const uid = req.body.user_id;
+    const imageURL = req.body.imageURL;
+
+    const options = {
+        upsert: true,
+        new: true
+    }
+
+    if(!uid || !imageURL){
+        return res.status(500).send({message: 'Input invalid'})
+    }
+    else{
+        try {
+            const result = await user.findOneAndUpdate(
+                {user_id: uid},
+                {
+                    imageURL: imageURL
+                },
+                options
+            );
+            res.status(200).send({user: result})
+        } catch (error) {
+            res.status(400).send({success: false, message: error})
+        }
+    }
+})
+
 router.get('/changeAccountType/:id', async (req, res) => {
     const options = {
         upsert: true,
