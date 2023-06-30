@@ -32,7 +32,7 @@ const SongCard = ({data, index}) => {
             <motion.img
               src={data.imageURL}
               alt="thumbnail"
-              className="object-cover w-full h-full rounded-md"
+              className="object-cover w-40 h-40 rounded-md"
               referrerPolicy="no-referrer"
               whileHover={{ scale: 1.05 }}
             />

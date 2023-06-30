@@ -91,7 +91,6 @@ const Upload = () => {
       setSongLoading(false);
       setImage(null);
       setImageLoading(false);
-      setUserData(null);
     }
   }
   
@@ -115,7 +114,7 @@ const Upload = () => {
   },[allSongs])
   
   return (
-    <div className='grid w-full grid-flow-row grid-cols-8 gap-2 p-2 h-fit max-h-[calc(100vh-7rem)] overflow-y-scroll pb-5'>
+    <div className='grid w-full grid-flow-row grid-cols-8 gap-2 p-2 h-fit max-h-[calc(100%-7rem)] overflow-y-scroll pb-5'>
       <form className='grid grid-cols-3 gap-4 p-2 rounded-md col-span-full bg-secondary'>
         <p className='font-medium uppercase col-span-full'>Upload</p>
         <div className='flex flex-col gap-5 col-span-full md:col-span-1'>
@@ -128,7 +127,7 @@ const Upload = () => {
               value={userData.title}
               onChange={(e)=>handle(e)}
               required
-              className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
+              className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-6 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
             ></input>
             <label
               htmlFor="title"
@@ -146,7 +145,7 @@ const Upload = () => {
               value={userData.album}
               onChange={(e)=>handle(e)}
               required
-              className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
+              className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-6 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
             ></input>
             <label
               htmlFor="album"
@@ -164,7 +163,7 @@ const Upload = () => {
               value={userData.language}
               onChange={(e)=>handle(e)}
               required
-              className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
+              className="w-full h-10 text-sm placeholder-transparent border border-gray-300 rounded-md md:py-6 md:text-base peer bg-secondary caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
             ></input>
             <label
               htmlFor="language"
@@ -173,7 +172,7 @@ const Upload = () => {
               Language
             </label>
           </div>
-          <select defaultValue={'Genre'} id='genre' className='text-sm border border-gray-300 rounded-md bg-secondary' onChange={(e)=>handle(e)}>
+          <select defaultValue={'Genre'} id='genre' className='text-sm border border-gray-300 rounded-md bg-secondary md:text-base md:py-2' onChange={(e)=>handle(e)}>
             <option>Genre</option>
             {popularGenres.map((genre, i)=>(<option key={i} value={genre}>{genre}</option>))}
           </select>

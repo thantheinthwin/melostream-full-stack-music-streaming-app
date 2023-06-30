@@ -43,7 +43,7 @@ const User = () => {
         {isMobile && <MobileNavBar/> || <SideBar />}
         <div className="flex-col w-full">
           <Navigation openProfile={handleOpen} />
-          <div className="w-full">
+          <div className="w-full h-full">
             <Routes>
               {routes.map((route, i) => (
                 <Route key={i} path={route.path} element={route.element} />
