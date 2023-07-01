@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -16,14 +16,13 @@ import { getAuth } from 'firebase/auth';
 const DashboardUserCard = ({data, index, item}) => {
     const createdAt = moment(new Date(data.createdAt)).format("MMM Do YY");
   
-    const [isMobile, setMobile] = useState(window.innerWidth < 700);
+    const [isMobile, setMobile] = useState(false);
 
     const [isDeleteConfirm, setDeleteConfirm] = useState(false);
   
     const [isMenuOpen, setMenuOpen] = useState(false);
-    const [{allUsers}, dispatch] = useStateValue();
-
-    const firebaseAuth = getAuth(app);
+    const [dispatch] = useStateValue();
+    const defaultImageURL = 'https://firebasestorage.googleapis.com/v0/b/mcc-music-web-project.appspot.com/o/images%2Fdefault%2Fprofile.webp?alt=media&token=97a1ef47-11ea-42ee-b397-3afb9f7aac75';
 
     const deleteUser = (uid) => {
       removeUser(uid).then((res) => {
@@ -35,6 +34,10 @@ const DashboardUserCard = ({data, index, item}) => {
         }
       })
     }
+
+    useEffect(()=>{
+      setMobile(window.innerWidth < 700)
+    },[])
   
     return (
       <div>
@@ -85,7 +88,7 @@ const DashboardUserCard = ({data, index, item}) => {
                   )}
               </AnimatePresence>
               <img
-                src={data.imageURL}
+                src={data.imageURL ? data.imageURL : defaultImageURL}
                 alt={data._id}
                 referrerPolicy='no-referrer'
                 className="object-cover w-10 h-10 rounded-md shadow-md"
@@ -149,7 +152,7 @@ const DashboardUserCard = ({data, index, item}) => {
                   }}
                   className="relative z-20 grid grid-flow-col grid-cols-4 p-2 divide-x rounded-b-sm bg-neutral-800 col-span-full"
                 >
-                  <div className="grid items-center col-span-3 grid-rows-4 gap-1 p-2">
+                  {/* <div className="grid items-center col-span-3 grid-rows-4 gap-1 p-2">
                     <p className="grid items-center grid-cols-5 col-span-1 text-sm break-word">
                       <span className="col-span-1 font-semibold">Role :</span>
                       <span className="col-span-4">
@@ -175,8 +178,32 @@ const DashboardUserCard = ({data, index, item}) => {
                       <span className="col-span-1 font-semibold">Date :</span>
                       <span className="col-span-4">{createdAt}</span>
                     </p>
+                  </div> */}
+                  <div className='flex flex-col justify-center col-span-3 gap-2 p-2'>
+                    <div className='flex flex-col'>
+                      <span className='font-semibold'>Role :</span>
+                      <Role title={data.role}/>
+                    </div>
+                    <div className='flex flex-col'>
+                      <span className="font-semibold">Email :</span>
+                      <span className='break-all'>{data.email}</span>
+                    </div>
+                    <div className='flex flex-col'>
+                      <span className="font-semibold">Paid :</span>
+                      <span className="text-sm font-semibold break-all">
+                        {data.subscription ? (
+                          <span className='text-green-500'>Subscribed</span>
+                        ) : (
+                          <span className='text-red-500'>Free user</span>
+                        )}
+                      </span>
+                    </div>
+                    <div className='flex flex-col'>
+                      <span className="font-semibold">Date :</span>
+                      <span>{createdAt}</span>
+                    </div>
                   </div>
-                  <div className="relative grid items-center col-span-3 grid-rows-2 gap-1 p-2 text-xl">
+                  <div className="relative grid items-center col-span-1 grid-rows-2 gap-1 p-2 text-xl">
                     {/* <div className='row-span-1 m-3 text-blue-500 justify-self-center'><HiOutlinePencil /></div> */}
                     <button
                       className="row-span-2 p-5 m-3 text-red-500 justify-self-center"

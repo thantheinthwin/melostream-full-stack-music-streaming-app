@@ -77,7 +77,7 @@ const SideBar = () => {
         </div>
         }
       </div>
-      <div className='flex items-center justify-center gap-1 py-3 bg-neutral-800'><i className='text-xl'><MdCopyright/></i> Thant Hein Thwin - 2023</div>
+      <div className='flex justify-center gap-1 py-3 bg-neutral-800'><i className='text-xl'><MdCopyright/></i> Thant Hein Thwin <br/>2023</div>
     </div>
   );
 }
