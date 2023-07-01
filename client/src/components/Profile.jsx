@@ -21,11 +21,6 @@ const Profile = (props) => {
     const [{user}, dispatch] = useStateValue();
     const [image, setImage] = useState(null);
 
-    useEffect(()=>{
-      setImage(user?.user?.imageURL);
-      // console.log('Image: ',image)
-    },[])
-
     const navigate = useNavigate();
 
     const username = user?.user?.name;
@@ -156,120 +151,327 @@ const Profile = (props) => {
 
     return (
       <AnimatePresence>
-        {open && <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{type: 'spring', duration: 0.5}} className='absolute z-50 w-screen h-screen bg-black bg-opacity-50'>
-          <motion.div initial={{opacity: 0, scale: 0.5}} animate={{opacity: 1, scale: 1}} exit={{opacity: 0, scale: 0.5}} transition={{type: 'spring', duration: 0.5}} className='fixed rounded-md top-0 bottom-0 left-0 right-0 grid gap-4 p-5 m-auto overflow-x-hidden overflow-y-auto bg-neutral-900 w-[calc(100%-1rem)] md:w-96 h-fit'>
-            <div className='flex items-center justify-between'>
-              <p className='text-3xl font-bold text-accent'>Profile</p>
-              <i className='text-xl text-white rounded-full hover:bg-neutral-700' onClick={()=>{uploadImage().then(()=>{handleClose()})}}><IoCloseOutline/></i>
-            </div>
-            <div className='grid gap-2'>
-              <label htmlFor='profile' className='relative w-fit'>
-                <div className='absolute flex flex-col-reverse w-full h-full text-center transition-all duration-200 ease-in-out rounded-lg opacity-0 bg-zinc-700 bg-opacity-30 hover:opacity-100'><span className='rounded-b-lg bg-zinc-600'>edit</span></div>
-                <img src={image ? URL.createObjectURL(image) : defaultImageURL} alt="profile pic" className='object-cover w-20 h-20 rounded-lg md:w-32 md:h-32' /> 
-                <input id='profile' type='file' accept='image/*' className='hidden' onChange={(e)=>getImage(e)}/> 
-              </label>
-              {/* <div className='relative'>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            className="absolute z-50 w-screen h-screen bg-black bg-opacity-50"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="fixed bottom-0 left-0 right-0 top-0 m-auto grid h-fit w-[calc(100%-1rem)] gap-4 overflow-y-auto overflow-x-hidden rounded-md bg-neutral-900 p-5 md:w-96"
+            >
+              <div className="flex items-center justify-between">
+                <p className="text-3xl font-bold text-accent">Profile</p>
+                <i
+                  className="text-xl text-white rounded-full hover:bg-neutral-700"
+                  onClick={() => {
+                    if(!image){
+                      uploadImage().then(()=>{handleClose()})
+                    }
+                    else {
+                      handleClose()
+                    }
+                  }}
+                >
+                  <IoCloseOutline />
+                </i>
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="profile" className="relative w-fit">
+                  <div className="absolute flex flex-col-reverse w-full h-full text-center transition-all duration-200 ease-in-out rounded-lg opacity-0 bg-zinc-700 bg-opacity-30 hover:opacity-100">
+                    <span className="rounded-b-lg bg-zinc-600">edit</span>
+                  </div>
+                  <img
+                    src={
+                      user?.user?.imageURL
+                        ? user?.user?.imageURL
+                        : defaultImageURL
+                    }
+                    alt="profile pic"
+                    className="object-cover w-20 h-20 rounded-lg md:h-32 md:w-32"
+                  />
+                  <input
+                    id="profile"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => getImage(e)}
+                  />
+                </label>
+                {/* <div className='relative'>
                 <img src={image ? URL.createObjectURL(image) : imageURL} alt="profile pic" className='object-cover w-24 h-24 rounded-lg' /> 
                 <input type='file' accept='image/*' className='hidden' onChange={(e)=>getImage(e)}/>
               </div> */}
-              <p className='font-medium'>Username</p>
-              <p className='font-light'>{username}</p>
-              <p className='font-medium'>Email</p>
-              <p className='font-light'>{email}</p>
-              <p className='font-medium'>Role</p>
-              <p className={`px-2 py-1 text-xs rounded-full w-fit ${role === "admin" ? "bg-red-500" : "bg-green-500"}`}>{role}</p>
-              <p className='font-medium'>Subscription</p>
-              <p className={`cursor-default font-light border w-fit py-1 px-2 rounded-md select-none ${subscription ? 'text-green-500 border-green-500': 'text-red-500 border-red-500'}`}>{subscription ? "Subscribed" : "Free User"}</p>    
-              <p className='font-medium'>Phone number</p>
-              {!editPhoneNumber && <div className='flex items-center gap-2'>
-                <p className={`font-light ${phnumber == '' ? "text-red-500": ""}`}>{phnumber == '' ? "unavailable": phnumber}</p>
-                <i className='p-2 text-lg transition-all duration-200 ease-in-out rounded-md hover:bg-red-500 hover:bg-opacity-50 hover:text-red-500' onClick={()=> {setEditPhoneNumber(true)}}><HiOutlinePencilAlt/></i>
-              </div>}
-              {editPhoneNumber && <div className='flex items-center'>
-                <input
-                  id='tel'
-                  type="tel"
-                  placeholder={phnumber !== '' ? phnumber : 'Enter your phone number'}
-                  value={phoneNumber}
-                  onChange={(e)=>{setPhoneNumber(e.target.value)}}
-                  className="w-full h-full bg-transparent border rounded-l-lg border-neutral-800 focus:border-neutral-800 focus:ring-0"
-                ></input>
-                <button className='h-full p-2 text-lg transition-all duration-200 ease-in-out bg-neutral-800 rounded-r-md hover:bg-neutral-700' onClick={()=>{handleSubmitPhnumber(phoneNumber)}}><MdOutlineSaveAlt/></button>
-              </div>}
-              {email_verified ? <p className='font-bold text-green-500'>Email verified</p> : <p className='flex items-center gap-1 transition-all duration-200 ease-in-out cursor-pointer hover:text-accent' onClick={() => {emailVerification(currentUser)}}>Verify email <i className='text-lg'><MdKeyboardArrowRight/></i></p>} 
-            </div>
-            <div className='p-2 text-sm text-red-500 border border-red-500 rounded-md cursor-default select-none w-fit hover:bg-red-500 hover:text-white justify-self-end' onClick={() => {setResetConfirm(true)}}>Reset password</div>
-            <div className='p-2 text-sm text-red-500 border border-red-500 rounded-md cursor-default select-none w-fit hover:bg-red-500 hover:text-white justify-self-end' onClick={() => {setDeleteConfirm(true)}}>Delete account</div>
-          </motion.div>
-          
-          {/* Reset password */}
-          <AnimatePresence>
-            {resetConfirm && <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.5, ease: 'easeInOut'}} className='absolute w-screen h-screen bg-black bg-opacity-50'>
-              <div className='fixed top-0 bottom-0 left-0 right-0 grid gap-2 p-5 m-auto rounded-md bg-neutral-900 h-fit w-[calc(100%-3rem)] md:w-96 divide-y divide-neutral-600'>
-                <h1 className='text-2xl font-bold text-center text-red-500'>Reset Password</h1>
-                <div className='grid gap-2 pt-2'>
-                  <form method='POST' className='grid gap-2'>
-                    <div className='grid'>
-                      <input
-                        id='newPasswd'
-                        type="password"
-                        placeholder='Enter your new password'
-                        value={passwd.newPasswd}
-                        onChange={(e) => {handle(e)}}
-                        onFocus={() => {setPwdFocus(true)}}
-                        onBlur={() => {setPwdFocus(false)}}
-                        className="w-full h-full text-sm bg-transparent border rounded-l-lg border-neutral-800 focus:border-neutral-800 focus:ring-0"
-                      ></input>
-                      <AnimatePresence>
-                        {(pwdFocus && !validPassword) && 
-                          <motion.div initial={{opacity: 0, y: -20}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: -20}} transition={{duration: 0.25, ease: "easeInOut"}} className='p-3 text-sm font-light border border-gray-300 rounded-md border-opacity-30 bg-secondary' id='pwdnote'>
-                            <p className='flex items-center gap-1'><i><AiOutlineInfoCircle/></i> 8 to 24 characters.</p>
-                            Must include uppercase and lowercase letters, a number and a special character.<br/>
-                            Allowed special characters:
-                            <span> !</span> <span>@</span> <span>#</span> <span>$</span>
-                          </motion.div>}
-                      </AnimatePresence>
-                    </div>
-                    <div className='grid'>
-                      <input
-                        id='confirmPasswd'
-                        type="password"
-                        placeholder='Confirm your password'
-                        value={passwd.confirmPasswd}
-                        onChange={(e) => {handle(e)}}
-                        onFocus={() => setMatchFocus(true)}
-                        onBlur={() => setMatchFocus(false)}
-                        className="w-full h-full text-sm bg-transparent border rounded-l-lg border-neutral-800 focus:border-neutral-800 focus:ring-0"
-                      ></input>
-                      <AnimatePresence>
-                        {(matchFocus && !matchPassword) && <motion.div initial={{opacity: 0, y: -20}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: -20}} transition={{duration: 0.25, ease: "easeInOut"}} className='p-3 text-sm font-light border border-gray-300 rounded-md border-opacity-30 bg-secondary' id='matchnote'>Must match the first input format field</motion.div>}
-                      </AnimatePresence>
-                    </div>
-                  </form>
-                  <div className='flex items-center gap-2'>
-                    {matchPassword ? <div className='w-full p-2 text-center bg-green-500 rounded-md cursor-default select-none' onClick={() => {handleSubmitPasswd(passwd.newPasswd)}}>Confirm</div> : <div className='w-full p-2 text-center rounded-md cursor-default select-none bg-neutral-700'>Nope</div>}
-                    <div className='w-full p-2 text-center bg-red-500 rounded-md cursor-default select-none' onClick={() => {setResetConfirm(false)}}>Cancel</div>
+                <p className="font-medium">Username</p>
+                <p className="font-light">{username}</p>
+                <p className="font-medium">Email</p>
+                <p className="font-light">{email}</p>
+                <p className="font-medium">Role</p>
+                <p
+                  className={`w-fit rounded-full px-2 py-1 text-xs ${
+                    role === "admin" ? "bg-red-500" : "bg-green-500"
+                  }`}
+                >
+                  {role}
+                </p>
+                <p className="font-medium">Subscription</p>
+                <p
+                  className={`w-fit cursor-default select-none rounded-md border px-2 py-1 font-light ${
+                    subscription
+                      ? "border-green-500 text-green-500"
+                      : "border-red-500 text-red-500"
+                  }`}
+                >
+                  {subscription ? "Subscribed" : "Free User"}
+                </p>
+                <p className="font-medium">Phone number</p>
+                {!editPhoneNumber && (
+                  <div className="flex items-center gap-2">
+                    <p
+                      className={`font-light ${
+                        phnumber == "" ? "text-red-500" : ""
+                      }`}
+                    >
+                      {phnumber == "" ? "unavailable" : phnumber}
+                    </p>
+                    <i
+                      className="p-2 text-lg transition-all duration-200 ease-in-out rounded-md hover:bg-red-500 hover:bg-opacity-50 hover:text-red-500"
+                      onClick={() => {
+                        setEditPhoneNumber(true);
+                      }}
+                    >
+                      <HiOutlinePencilAlt />
+                    </i>
                   </div>
-                </div>
+                )}
+                {editPhoneNumber && (
+                  <div className="flex items-center">
+                    <input
+                      id="tel"
+                      type="tel"
+                      placeholder={
+                        phnumber !== "" ? phnumber : "Enter your phone number"
+                      }
+                      value={phoneNumber}
+                      onChange={(e) => {
+                        setPhoneNumber(e.target.value);
+                      }}
+                      className="w-full h-full bg-transparent border rounded-l-lg border-neutral-800 focus:border-neutral-800 focus:ring-0"
+                    ></input>
+                    <button
+                      className="h-full p-2 text-lg transition-all duration-200 ease-in-out rounded-r-md bg-neutral-800 hover:bg-neutral-700"
+                      onClick={() => {
+                        handleSubmitPhnumber(phoneNumber);
+                      }}
+                    >
+                      <MdOutlineSaveAlt />
+                    </button>
+                  </div>
+                )}
+                {email_verified ? (
+                  <p className="font-bold text-green-500">Email verified</p>
+                ) : (
+                  <p
+                    className="flex items-center gap-1 transition-all duration-200 ease-in-out cursor-pointer hover:text-accent"
+                    onClick={() => {
+                      emailVerification(currentUser);
+                    }}
+                  >
+                    Verify email{" "}
+                    <i className="text-lg">
+                      <MdKeyboardArrowRight />
+                    </i>
+                  </p>
+                )}
               </div>
-            </motion.div>}
-          </AnimatePresence>
+              <div
+                className="p-2 text-sm text-red-500 border border-red-500 rounded-md cursor-default select-none w-fit justify-self-end hover:bg-red-500 hover:text-white"
+                onClick={() => {
+                  setResetConfirm(true);
+                }}
+              >
+                Reset password
+              </div>
+              <div
+                className="p-2 text-sm text-red-500 border border-red-500 rounded-md cursor-default select-none w-fit justify-self-end hover:bg-red-500 hover:text-white"
+                onClick={() => {
+                  setDeleteConfirm(true);
+                }}
+              >
+                Delete account
+              </div>
+            </motion.div>
 
-          {/* Delete Account Confirmation */}
-          <AnimatePresence>
-            {deleteConfirm && <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.5, ease: 'easeInOut'}} className='absolute w-screen h-screen bg-black bg-opacity-50'>
-              <div className='fixed top-0 bottom-0 left-0 right-0 grid gap-2 p-5 m-auto rounded-md bg-neutral-900 h-fit w-[calc(100%-3rem)] md:w-96'>
-                <p className='text-center'>Are you sure you want to delete you account?</p>
-                <div className='flex gap-2'>
-                  <div className='w-full p-2 text-center bg-red-500 rounded-md cursor-default select-none' onClick={() => {deleteUser(currentUser, _id)}}>Delete</div>
-                  <div className='w-full p-2 text-center bg-green-500 rounded-md cursor-default select-none' onClick={() => {setDeleteConfirm(false)}}>Cancel</div>
-                </div>
-              </div>
-            </motion.div>}
-          </AnimatePresence>
-        </motion.div>}
-      </AnimatePresence> 
-    )
+            {/* Reset password */}
+            <AnimatePresence>
+              {resetConfirm && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="absolute w-screen h-screen bg-black bg-opacity-50"
+                >
+                  <div className="fixed bottom-0 left-0 right-0 top-0 m-auto grid h-fit w-[calc(100%-3rem)] gap-2 divide-y divide-neutral-600 rounded-md bg-neutral-900 p-5 md:w-96">
+                    <h1 className="text-2xl font-bold text-center text-red-500">
+                      Reset Password
+                    </h1>
+                    <div className="grid gap-2 pt-2">
+                      <form method="POST" className="grid gap-2">
+                        <div className="grid">
+                          <input
+                            id="newPasswd"
+                            type="password"
+                            placeholder="Enter your new password"
+                            value={passwd.newPasswd}
+                            onChange={(e) => {
+                              handle(e);
+                            }}
+                            onFocus={() => {
+                              setPwdFocus(true);
+                            }}
+                            onBlur={() => {
+                              setPwdFocus(false);
+                            }}
+                            className="w-full h-full text-sm bg-transparent border rounded-l-lg border-neutral-800 focus:border-neutral-800 focus:ring-0"
+                          ></input>
+                          <AnimatePresence>
+                            {pwdFocus && !validPassword && (
+                              <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{
+                                  duration: 0.25,
+                                  ease: "easeInOut",
+                                }}
+                                className="p-3 text-sm font-light border border-gray-300 rounded-md border-opacity-30 bg-secondary"
+                                id="pwdnote"
+                              >
+                                <p className="flex items-center gap-1">
+                                  <i>
+                                    <AiOutlineInfoCircle />
+                                  </i>{" "}
+                                  8 to 24 characters.
+                                </p>
+                                Must include uppercase and lowercase letters, a
+                                number and a special character.
+                                <br />
+                                Allowed special characters:
+                                <span> !</span> <span>@</span> <span>#</span>{" "}
+                                <span>$</span>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        <div className="grid">
+                          <input
+                            id="confirmPasswd"
+                            type="password"
+                            placeholder="Confirm your password"
+                            value={passwd.confirmPasswd}
+                            onChange={(e) => {
+                              handle(e);
+                            }}
+                            onFocus={() => setMatchFocus(true)}
+                            onBlur={() => setMatchFocus(false)}
+                            className="w-full h-full text-sm bg-transparent border rounded-l-lg border-neutral-800 focus:border-neutral-800 focus:ring-0"
+                          ></input>
+                          <AnimatePresence>
+                            {matchFocus && !matchPassword && (
+                              <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{
+                                  duration: 0.25,
+                                  ease: "easeInOut",
+                                }}
+                                className="p-3 text-sm font-light border border-gray-300 rounded-md border-opacity-30 bg-secondary"
+                                id="matchnote"
+                              >
+                                Must match the first input format field
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </form>
+                      <div className="flex items-center gap-2">
+                        {matchPassword ? (
+                          <div
+                            className="w-full p-2 text-center bg-green-500 rounded-md cursor-default select-none"
+                            onClick={() => {
+                              handleSubmitPasswd(passwd.newPasswd);
+                            }}
+                          >
+                            Confirm
+                          </div>
+                        ) : (
+                          <div className="w-full p-2 text-center rounded-md cursor-default select-none bg-neutral-700">
+                            Nope
+                          </div>
+                        )}
+                        <div
+                          className="w-full p-2 text-center bg-red-500 rounded-md cursor-default select-none"
+                          onClick={() => {
+                            setResetConfirm(false);
+                          }}
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Delete Account Confirmation */}
+            <AnimatePresence>
+              {deleteConfirm && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="absolute w-screen h-screen bg-black bg-opacity-50"
+                >
+                  <div className="fixed bottom-0 left-0 right-0 top-0 m-auto grid h-fit w-[calc(100%-3rem)] gap-2 rounded-md bg-neutral-900 p-5 md:w-96">
+                    <p className="text-center">
+                      Are you sure you want to delete you account?
+                    </p>
+                    <div className="flex gap-2">
+                      <div
+                        className="w-full p-2 text-center bg-red-500 rounded-md cursor-default select-none"
+                        onClick={() => {
+                          deleteUser(currentUser, _id);
+                        }}
+                      >
+                        Delete
+                      </div>
+                      <div
+                        className="w-full p-2 text-center bg-green-500 rounded-md cursor-default select-none"
+                        onClick={() => {
+                          setDeleteConfirm(false);
+                        }}
+                      >
+                        Cancel
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    );
 }
 
 export default Profile

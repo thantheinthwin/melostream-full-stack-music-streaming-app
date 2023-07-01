@@ -25,3 +25,4 @@ export { default as Artist3 } from './artist3.jpg'
 export { default as Artist4 } from './artist4.jpg'
 
 export { default as CreditCard } from './creditcard.webp'
+export { default as GoogleAds } from './Google_Ads_logo.svg.png'

@@ -31,7 +31,14 @@ const Subscribe = () => {
   // console.log(selectedOption);
   return (
     <div className="flex h-full max-h-[calc(100%-7rem)] w-full overflow-y-scroll p-2 md:items-center md:overflow-y-hidden md:p-4 lg:max-h-[calc(100%-2rem)]">
-      {!clicked && (
+      {
+        user?.user?.subscription && 
+        <div className='flex items-center justify-center w-full p-8 bg-secondary'>
+          <p className='text-3xl'>You have already subscribed</p>
+        </div>
+      }
+
+      {(!clicked && !user?.user?.subscription) && (
         <div className="grid items-center w-full gap-4 py-6 mt-2 mb-6 rounded-lg h-fit justify-evenly bg-secondary md:px-10 md:py-20 lg:flex">
           <div className="flex flex-col gap-2 px-6 w-fit">
             {user && (
@@ -158,7 +165,7 @@ const Subscribe = () => {
       )}
 
       {/* Last Step */}
-      {clicked && (
+      {(clicked && !user?.user?.subscription) && (
         <div className="relative grid items-center w-full gap-12 px-2 py-6 mt-2 mb-6 rounded-lg h-fit justify-evenly bg-secondary md:px-8 md:py-20 lg:flex lg:gap-0">
           <div className="flex flex-col gap-2 px-6 mt-8 md:mt-0 w-fit">
             {user && (
