@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -10,8 +10,8 @@ import { useStateValue } from '../../context/StateProvider';
 
 const SongCard = ({data, index}) => {
   const [isDeleteConfirm, setDeleteConfirm] = useState(false);
-  const [{allSongs}, dispatch] = useStateValue();
-  const [isDashboardBranch, setDashboardBranch] = useState(window.location.pathname.split("/").some(path => path === "dashboard"));
+  const [dispatch] = useStateValue();
+  const [isDashboardBranch, setDashboardBranch] = useState('');
 
   const deleteSong = (songId) => {
     removeSong(songId).then((res) => {
@@ -23,10 +23,14 @@ const SongCard = ({data, index}) => {
       }
     });
   }
+
+  useEffect(()=>{
+    setDashboardBranch(window.location.pathname.split("/").some(path => path === "dashboard"));
+  },[])
   
   return (
     <AnimatePresence>
-      <div className="relative flex flex-col items-center col-span-1 gap-2 rounded-md cursor-pointer bg-neutral-900">
+      <div key={index} className="relative flex flex-col items-center col-span-1 gap-2 rounded-md cursor-pointer bg-neutral-900">
         <div className='p-2'> 
           <div className="relative w-full overflow-hidden rounded-md">
             <motion.img

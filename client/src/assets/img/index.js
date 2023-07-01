@@ -23,3 +23,5 @@ export { default as Artist1 } from './artist1.jpg'
 export { default as Artist2 } from './artist2.jpg'
 export { default as Artist3 } from './artist3.jpg'
 export { default as Artist4 } from './artist4.jpg'
+
+export { default as CreditCard } from './creditcard.webp'
