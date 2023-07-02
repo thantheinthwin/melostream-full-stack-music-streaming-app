@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 import { Route, Routes } from 'react-router-dom'
-import { Favourite, Home, MobileNavBar, Profile, SideBar, Subscribe, Upload } from '../components'
+import { Favourite, Home, MobileNavBar, MySongsPage, Profile, SideBar, Subscribe, Upload } from '../components'
 import Navigation from '../components/navigation'
 
 const User = () => {
@@ -21,6 +21,10 @@ const User = () => {
     {
       path: '/upload',
       element: <Upload/>
+    },
+    {
+      path: '/mysongs',
+      element: <MySongsPage/>
     }
   ]
 

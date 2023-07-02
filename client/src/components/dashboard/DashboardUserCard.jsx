@@ -21,7 +21,7 @@ const DashboardUserCard = ({data, index, item}) => {
     const [isDeleteConfirm, setDeleteConfirm] = useState(false);
   
     const [isMenuOpen, setMenuOpen] = useState(false);
-    const [dispatch] = useStateValue();
+    const [{allUsers}, dispatch] = useStateValue();
     const defaultImageURL = 'https://firebasestorage.googleapis.com/v0/b/mcc-music-web-project.appspot.com/o/images%2Fdefault%2Fprofile.webp?alt=media&token=97a1ef47-11ea-42ee-b397-3afb9f7aac75';
 
     const deleteUser = (uid) => {

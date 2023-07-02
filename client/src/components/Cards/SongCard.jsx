@@ -7,21 +7,32 @@ import { BsTrash } from 'react-icons/bs';
 import { removeSong } from '../../api';
 import { actionType } from '../../context/reducer';
 import { useStateValue } from '../../context/StateProvider';
+import { deleteFileObject } from '../supportFunctions';
 
 const SongCard = ({data, index}) => {
   const [isDeleteConfirm, setDeleteConfirm] = useState(false);
-  const [dispatch] = useStateValue();
+  const [{allSongs}, dispatch] = useStateValue();
   const [isDashboardBranch, setDashboardBranch] = useState('');
 
-  const deleteSong = (songId) => {
-    removeSong(songId).then((res) => {
-      if (res) {
-        dispatch({
-          type: actionType.SET_ALL_SONGS,
-          allSongs: data.data,
-        });
-      }
-    });
+  const deleteSong = (songId, songURL, imageURL) => {
+    deleteFileObject(songURL)
+    .then(()=>{
+      deleteFileObject(imageURL)
+      .then(()=>{
+        removeSong(songId)
+        .then((res) => {
+          if (res) {
+            dispatch({
+              type: actionType.SET_ALL_SONGS,
+              allSongs: data.data
+            })
+          }
+        })
+        .catch((error)=>console.error(error))
+      })
+      .catch((error)=>console.error(error))
+    })
+    .catch((error)=>console.error(error))
   }
 
   useEffect(()=>{
@@ -62,7 +73,7 @@ const SongCard = ({data, index}) => {
           </div>
         </div>
         <AnimatePresence>
-          {(isDeleteConfirm && isDashboardBranch) && (
+          {isDeleteConfirm && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -77,7 +88,7 @@ const SongCard = ({data, index}) => {
                   <span
                     className="row-span-1 p-2 text-center text-white transition-all duration-200 ease-in-out bg-green-500 rounded-lg hover:bg-green-600 hover:shadow-md"
                     onClick={() => {
-                      deleteSong(data._id);
+                      deleteSong(data._id, data.songURL, data.imageURL);
                     }}
                   >
                     Yes

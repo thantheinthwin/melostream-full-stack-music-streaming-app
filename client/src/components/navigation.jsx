@@ -163,7 +163,7 @@ const Navigation = (props) => {
               <div className="py-1" role="none">
                 <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out select-none hover:bg-neutral-700' onClick={() => {openProfile(); setIsMenu(false)}}>Profile</div>
                 {(role === 'member') && <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700' onClick={() => {changeAccountType(user_id)}}>Change account type</div>}
-                {role === 'artist' && <NavLink to={"/"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>My Songs</NavLink>}
+                {role === 'artist' && <NavLink to={"/user/mysongs"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>My Songs</NavLink>}
               </div>
               {(isAdmin && !isDashboardBranch)  && <div className='py-1' role='none'>
                 <NavLink to={"/dashboard/home"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>Dashboard</NavLink>

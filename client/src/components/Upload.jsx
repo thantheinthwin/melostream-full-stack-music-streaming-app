@@ -76,14 +76,14 @@ const Upload = () => {
         genre: userData.genre,
       }
 
-      addSong(data).then((res) => {
+      addSong(data).then(() => {
         getAllSongs()
         .then((songs) => {
           dispatch({
             type: actionType.SET_ALL_SONGS,
             allSongs: songs.song
           })
-          navigate('/')
+          navigate('/user/mysongs')
         })
       })
 
@@ -218,16 +218,6 @@ const Upload = () => {
     </div>
   )
 }
-
-export const SongContainer = ({song, artist}) => {
-  return (
-    <div className='grid items-center grid-cols-4 col-span-3 gap-4 p-4 overflow-y-scroll border rounded-lg h-[44rem]'>
-      { song && song.filter(song => song.artist === artist).map((song, i) =>
-        <SongCard key={song._id} data={song} index={i} />
-      ) }
-    </div>
-  );
-};
 
 export const FileLoader = ({ progress }) => {
   return (
