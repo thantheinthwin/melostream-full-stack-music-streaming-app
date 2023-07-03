@@ -96,9 +96,10 @@ const Upload = () => {
   
   useEffect(()=>{
     if(!user){
+      const firebaseAuth = getAuth(app);
       dispatch({
         type: actionType.SET_USER,
-        user: getAuth(app).currentUser
+        user: firebaseAuth.currentUser
       })
     }
     

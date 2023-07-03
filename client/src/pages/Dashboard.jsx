@@ -82,7 +82,7 @@ const Dashboard = () => {
             </NavLink>
           ))}
         </nav>
-        <div className="grid grid-flow-col grid-cols-4 col-span-full lg:col-span-8 lg:col-start-2 lg:grid-cols-8">
+        <div className="grid grid-cols-4 col-span-full lg:col-span-8 lg:col-start-2 lg:grid-cols-8">
           <Routes>
             {routes.map((route, i) => (
               <Route key={i} path={route.path} element={route.element} />

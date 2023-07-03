@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { BsTrash } from 'react-icons/bs';
+import { FaPlay } from 'react-icons/fa';
 
 import { removeSong } from '../../api';
 import { actionType } from '../../context/reducer';
@@ -13,6 +14,7 @@ const SongCard = ({data, index}) => {
   const [isDeleteConfirm, setDeleteConfirm] = useState(false);
   const [{allSongs}, dispatch] = useStateValue();
   const [isDashboardBranch, setDashboardBranch] = useState('');
+  const [isArtist, setIsArtist] = useState('');
 
   const deleteSong = (songId, songURL, imageURL) => {
     deleteFileObject(songURL)
@@ -37,12 +39,16 @@ const SongCard = ({data, index}) => {
 
   useEffect(()=>{
     setDashboardBranch(window.location.pathname.split("/").some(path => path === "dashboard"));
-  },[])
+  }, [])
+
+  useEffect(() => {
+    setIsArtist(window.location.pathname.split('/').some(path => path === 'mysongs'))
+  }, [])
   
   return (
     <AnimatePresence>
       <div key={index} className="relative flex flex-col items-center col-span-1 gap-2 rounded-md cursor-pointer bg-neutral-900">
-        <div className='p-2'> 
+        <div className='flex flex-col gap-2 p-2'> 
           <div className="relative w-full overflow-hidden rounded-md">
             <motion.img
               src={data.imageURL}
@@ -60,6 +66,7 @@ const SongCard = ({data, index}) => {
                 : data.artist}
             </span>
           </p>
+          { (isArtist || isDashboardBranch) &&
           <div className="relative flex items-center justify-center w-full">
             <motion.i
               whileHover={{ scale: 1.15 }}
@@ -71,6 +78,13 @@ const SongCard = ({data, index}) => {
               <BsTrash />
             </motion.i>
           </div>
+          }
+          {
+            (!isArtist && !isDashboardBranch) &&
+            <div className='flex items-center justify-center w-full'>
+              <i className='p-2 transition-all duration-200 ease-in-out rounded-md hover:bg-opacity-25 hover:bg-white'><FaPlay/></i>
+            </div>
+          }
         </div>
         <AnimatePresence>
           {isDeleteConfirm && (

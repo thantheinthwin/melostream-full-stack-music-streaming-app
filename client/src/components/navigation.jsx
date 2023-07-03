@@ -114,66 +114,56 @@ const Navigation = (props) => {
   }
 
   return (
-    <div className='flex items-center justify-between w-full text-white bg-neutral-900'>
-        {!isDashboardBranch && !isMobile && <div className='flex gap-1'>
-            <div className='text-2xl h-fit hover:bg-sky-blue-75 hover:cursor-pointer'><AiOutlineLeft/></div>
-            <div className='text-2xl h-fit hover:bg-sky-blue-75 hover:cursor-pointer'><AiOutlineRight/></div>
-            <div>
-                <input placeholder='Search' className='pl-2'/>
-            </div>
-        </div>}
-
-        {(!isMobile && isDashboardBranch) && <img src={Logo} className='object-cover w-12 h-12 m-2' alt="Logo"/>}
-        
-        {
-          (isMobile && isDashboardBranch) && <div className='relative'>
-            <div className='p-2'><Hamburger toggled={isOpen} toggle={setOpen} rounded/></div>
-            <AnimatePresence>
-              {isOpen && <motion.nav 
-              initial={{opacity: 0, y: -25}}
-              animate={{opacity: 1, y: 0, transition: {type: 'spring', duration: 0.5}}}
-              exit={{opacity: 0, y: -25, transition: {type: 'spring', duration: 0.5}}}
-              className='absolute z-40 grid w-screen p-4 text-xl font-medium text-center shadow-md bg-neutral-900'>
-                { menuItems.map((item, i) => <NavLink key={i} to={item.link} className={({isActive}) => isActive ? isActiveDashboardNav : isNotActiveDashboardNav} onClick={()=>setOpen(false)}>{item.to}</NavLink>)}
-              </motion.nav>}
-            </AnimatePresence>
-          </div>
-        }
-        <div className='relative flex items-center gap-2 m-2 ml-auto cursor-pointer' onMouseEnter={()=> {setIsMenu(true)}} onMouseLeave={()=> {setIsMenu(false)}}>
-          <div className='flex flex-col gap-1'>
-            <p>{username}</p>
-            <div className='flex flex-row-reverse gap-2 text-xl'>
-              {subscription && <BiCrown/>}
-              {userIcon}
-            </div>     
-          </div>     
-          <img src={user?.user?.imageURL !== null ? user?.user?.imageURL : defaultImageURL} alt="profile pic" referrerPolicy='no-referrer' className='w-12 min-w-[44px] rounded-lg object-cover shadow-lg filter hover:contrast-75'/>
-          {isMenu && (
-            <motion.div 
-            initial={{opacity : 0, y : -50}} 
-            animate={{opacity : 1, y: 0}}
-            exit={{opacity : 0, y: -50}}
-            className="absolute right-0 z-50 divide-y rounded-md shadow-lg divide-neutral-500 w-aut bg-neutral-800 top-12 ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
-              <div className="py-1" role="none">
-                <p className='block px-4 py-2 text-sm'>Signed in as<br/><span className='font-bold'>{email}</span></p>
-              </div>
-              {isDashboardBranch && <div className='py-1' role='none'>
-                <NavLink to={"/user/home"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>Home</NavLink>
-              </div>}
-              <div className="py-1" role="none">
-                <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out select-none hover:bg-neutral-700' onClick={() => {openProfile(); setIsMenu(false)}}>Profile</div>
-                {(role === 'member') && <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700' onClick={() => {changeAccountType(user_id)}}>Change account type</div>}
-                {role === 'artist' && <NavLink to={"/user/mysongs"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>My Songs</NavLink>}
-              </div>
-              {(isAdmin && !isDashboardBranch)  && <div className='py-1' role='none'>
-                <NavLink to={"/dashboard/home"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>Dashboard</NavLink>
-              </div>}
-              <div className="py-1" role="none">
-                <button onClick={logOut} type="submit" className="block w-full px-4 py-2 text-sm text-left transition-all duration-200 ease-in-out hover:bg-neutral-700">Sign out</button>
-              </div>
-            </motion.div>
-          )}
+    <div className='flex items-center justify-between w-full text-white bg-neutral-900'>     
+      {
+        (isMobile && isDashboardBranch) && <div className='relative'>
+          <div className='p-2'><Hamburger toggled={isOpen} toggle={setOpen} rounded/></div>
+          <AnimatePresence>
+            {isOpen && <motion.nav 
+            initial={{opacity: 0, y: -25}}
+            animate={{opacity: 1, y: 0, transition: {type: 'spring', duration: 0.5}}}
+            exit={{opacity: 0, y: -25, transition: {type: 'spring', duration: 0.5}}}
+            className='absolute z-40 grid w-screen p-4 text-xl font-medium text-center shadow-md bg-neutral-900'>
+              { menuItems.map((item, i) => <NavLink key={i} to={item.link} className={({isActive}) => isActive ? isActiveDashboardNav : isNotActiveDashboardNav} onClick={()=>setOpen(false)}>{item.to}</NavLink>)}
+            </motion.nav>}
+          </AnimatePresence>
         </div>
+      }
+      <div className='relative flex items-center gap-2 m-2 ml-auto cursor-pointer' onMouseEnter={()=> {setIsMenu(true)}} onMouseLeave={()=> {setIsMenu(false)}}>
+        <div className='flex flex-col gap-1'>
+          <p>{username}</p>
+          <div className='flex flex-row-reverse gap-2 text-xl'>
+            {subscription && <BiCrown/>}
+            {userIcon}
+          </div>     
+        </div>     
+        <img src={user?.user?.imageURL !== null ? user?.user?.imageURL : defaultImageURL} alt="profile pic" referrerPolicy='no-referrer' className='w-12 min-w-[44px] rounded-lg object-cover shadow-lg filter hover:contrast-75'/>
+        {isMenu && (
+          <motion.div 
+          initial={{opacity : 0, y : -50}} 
+          animate={{opacity : 1, y: 0}}
+          exit={{opacity : 0, y: -50}}
+          className="absolute right-0 z-50 divide-y rounded-md shadow-lg divide-neutral-500 w-aut bg-neutral-800 top-12 ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+            <div className="py-1" role="none">
+              <p className='block px-4 py-2 text-sm'>Signed in as<br/><span className='font-bold'>{email}</span></p>
+            </div>
+            {isDashboardBranch && <div className='py-1' role='none'>
+              <NavLink to={"/user/home"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>Home</NavLink>
+            </div>}
+            <div className="py-1" role="none">
+              <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out select-none hover:bg-neutral-700' onClick={() => {openProfile(); setIsMenu(false)}}>Profile</div>
+              {(role === 'member') && <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700' onClick={() => {changeAccountType(user_id)}}>Change account type</div>}
+              {role === 'artist' && <NavLink to={"/user/mysongs"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>My Songs</NavLink>}
+            </div>
+            {(isAdmin && !isDashboardBranch)  && <div className='py-1' role='none'>
+              <NavLink to={"/dashboard/home"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>Dashboard</NavLink>
+            </div>}
+            <div className="py-1" role="none">
+              <button onClick={logOut} type="submit" className="block w-full px-4 py-2 text-sm text-left transition-all duration-200 ease-in-out hover:bg-neutral-700">Sign out</button>
+            </div>
+          </motion.div>
+        )}
+      </div>
     </div>
   )
 }

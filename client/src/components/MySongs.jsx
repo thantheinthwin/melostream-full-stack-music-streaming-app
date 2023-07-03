@@ -55,7 +55,7 @@ const MySongs = () => {
 
   return (
     <div className="grid justify-center grid-cols-4 gap-3 p-4 col-span-full lg:grid-cols-8">
-        {/* Search bar */}
+      {/* Search bar */}
       <div className="relative grid grid-flow-col grid-cols-8 col-span-full lg:col-span-4 lg:col-start-3">
         <div className="relative grid grid-flow-col col-span-7">
           <div className="absolute items-center text-lg text-gray-500 pointer-events-none left-4 top-3">

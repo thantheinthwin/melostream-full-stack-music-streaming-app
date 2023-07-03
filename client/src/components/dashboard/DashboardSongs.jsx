@@ -63,7 +63,7 @@ const DashboardSongs = () => {
       </div>
 
       {/* Main Container */}
-      <div className="grid items-center justify-center grid-cols-4 border border-gray-300 rounded-md col-span-full lg:grid-cols-8 max-h-[60vh]">
+      <div className="grid items-center justify-center grid-cols-4 border border-gray-300 rounded-md col-span-full lg:grid-cols-8 max-h-[75vh]">
         <div className="p-2 text-sm text-gray-400 col-span-full">
           You have {filteredSongs ? filteredSongs?.length : allSongs?.length} songs in the database.
         </div>
@@ -75,7 +75,7 @@ const DashboardSongs = () => {
 
 export const SongContainer = ({data}) => {
   return (
-    <div className='grid items-center h-full grid-cols-2 gap-4 p-2 overflow-y-scroll scrollbar-hide sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 col-span-full justify-evenly'>
+    <div className='grid items-center h-full max-h[calc(100%-5rem)] grid-cols-2 gap-4 p-2 overflow-y-scroll scrollbar-hide sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 col-span-full justify-evenly'>
       { data && data.map((song, i) =>
         <SongCard key={song._id} data={song} index={i} />
       ) }
