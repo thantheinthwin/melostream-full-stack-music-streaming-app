@@ -44,3 +44,15 @@ input[data-autocompleted] {
   border-radius: 14px;
   border: 2px solid var(--primary);
 }
+
+.rhap_container {
+  background-color: #ffffff00;
+}
+
+.rhap_progress-filled {
+  background-color: #8f06ea;
+}
+
+.rhap_time {
+  color: white;
+}

@@ -12,7 +12,7 @@ import { deleteFileObject } from '../supportFunctions';
 
 const SongCard = ({data, index}) => {
   const [isDeleteConfirm, setDeleteConfirm] = useState(false);
-  const [{allSongs}, dispatch] = useStateValue();
+  const [{allSongs, isSongPlaying, songIndex, showMusicPlayer}, dispatch] = useStateValue();
   const [isDashboardBranch, setDashboardBranch] = useState('');
   const [isArtist, setIsArtist] = useState('');
 
@@ -37,6 +37,29 @@ const SongCard = ({data, index}) => {
     .catch((error)=>console.error(error))
   }
 
+  const addToContext = () => {
+    if(!isSongPlaying) {
+      dispatch({
+        type: actionType.SET_ISSONG_PLAYING,
+        isSongPlaying: true,
+      });
+    } 
+
+    if (songIndex !== index) {
+      dispatch({
+        type: actionType.SET_SONG_INDEX,
+        songIndex: index
+      })
+    }
+
+    if(!showMusicPlayer) {
+      dispatch({
+        type: actionType.SET_SHOW_MUSICPLAYER,
+        showMusicPlayer: true,
+      })
+    }
+  }
+
   useEffect(()=>{
     setDashboardBranch(window.location.pathname.split("/").some(path => path === "dashboard"));
   }, [])
@@ -47,7 +70,7 @@ const SongCard = ({data, index}) => {
   
   return (
     <AnimatePresence>
-      <div key={index} className="relative flex flex-col items-center col-span-1 gap-2 rounded-md cursor-pointer bg-neutral-900">
+      <div key={index} className="relative flex flex-col items-center col-span-1 gap-2 rounded-md cursor-pointer bg-neutral-900" onClick={addToContext}>
         <div className='flex flex-col gap-2 p-2'> 
           <div className="relative w-full overflow-hidden rounded-md">
             <motion.img
@@ -79,12 +102,12 @@ const SongCard = ({data, index}) => {
             </motion.i>
           </div>
           }
-          {
+          {/* {
             (!isArtist && !isDashboardBranch) &&
             <div className='flex items-center justify-center w-full'>
               <i className='p-2 transition-all duration-200 ease-in-out rounded-md hover:bg-opacity-25 hover:bg-white'><FaPlay/></i>
             </div>
-          }
+          } */}
         </div>
         <AnimatePresence>
           {isDeleteConfirm && (

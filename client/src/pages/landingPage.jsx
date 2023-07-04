@@ -41,49 +41,6 @@ const landingPage = () => {
       link: '/'
     }
   ]
-
-  const container = {
-    show: {
-      transition: {
-        staggerChildren: 0.35,
-      },
-    },
-  };
-  
-  const item = {
-    hidden: {opacity: 0, y: 200 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        ease: "easeInOut",
-        duration: 1.6,
-      },
-    },
-    exit: {
-      opacity: 0,
-      y: -200,
-      transition: {
-        ease: "easeInOut",
-        duration: 0.8,
-      },
-    },
-  };
-  
-  const itemMain = {
-    hidden: { opacity: 0, y: 200 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        ease: "easeInOut",
-        duration: 1.6,
-      },
-    },
-    exit: {
-      opacity: 0,
-    },
-  };
   
   return (
     <div className='relative'>

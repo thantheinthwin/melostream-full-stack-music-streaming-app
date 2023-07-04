@@ -81,7 +81,7 @@ const Home = () => {
           ></input>
         </div>
         <button
-          className="flex items-center justify-center text-white rounded-r-lg bg-neutral-900 hover:bg-neutral-800"
+          className="flex items-center justify-center px-2 text-white rounded-r-lg bg-neutral-900 hover:bg-neutral-800"
           onClick={() => setSongFilter("")}
         >
           <RxCross1 />
@@ -94,7 +94,7 @@ const Home = () => {
 
 const SongContainer = ({data}) => {
   return (
-    <div className='grid grid-cols-2 w-full h-fit max-h-[calc(100%-7rem)] gap-2 overflow-y-scroll p-2 lg:grid-cols-6 xl:grid-cols-8'>
+    <div className='grid grid-cols-2 w-full h-fit max-h-[calc(100%-10rem)] gap-2 overflow-y-scroll p-2 lg:grid-cols-6 xl:grid-cols-8'>
       {data && data.map((song, i) => <SongCard key={song._id} data={song} index={i}/>)}
     </div>
   )

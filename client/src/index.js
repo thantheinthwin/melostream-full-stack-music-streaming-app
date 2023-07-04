@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
+import 'react-h5-audio-player/lib/styles.css'
 import './index.css';
 
 import reportWebVitals from './reportWebVitals';

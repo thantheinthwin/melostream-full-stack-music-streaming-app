@@ -139,7 +139,7 @@ const Login = ({setAuth}) => {
   }
 
   useEffect(() => {
-    if( userData.email == "" || userData.password == "" ){
+    if( userData.email === "" || userData.password === "" ){
       setError(false);
     }
   },[userData])
