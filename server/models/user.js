@@ -21,6 +21,9 @@ const UserSchema = mongoose.Schema({
     ph_number: {
         type: String,
     },
+    likedSongs: {
+        type: Array,
+    },
     role: {
         type: String,
         required: true,

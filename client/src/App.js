@@ -46,6 +46,15 @@ const App = () => {
         })
     }, []);
 
+    useEffect(()=>{
+        if(!window.location.href.split('/').some(pos => pos == 'user')){
+            dispatch({
+                type: actionType.SET_ISSONG_PLAYING,
+                isSongPlaying: false,
+            })
+        }
+    },[window.location.href])
+
     return (
         <AnimatePresence mode="wait">
             <div className="flex items-center justify-center font-primary">
@@ -65,7 +74,7 @@ const App = () => {
                         animate={{opacity: 1, y: 0}}
                         exit={{opacity: 0, y: 50}}
                         transition={{duration: 0.5}}
-                        className={window.innerWidth < 700 ? "fixed p-2 bottom-14 bg-neutral-800 w-full rounded-t-lg" : "fixed p-4 bottom-0 bg-neutral-800 w-2/3 right-0 mr-2"}
+                        className={window.innerWidth < 700 ? "fixed p-2 bottom-14 bg-neutral-800 w-full rounded-t-lg" : "fixed p-4 bottom-0 bg-neutral-800 w-2/3 right-0 mr-2 rounded-tl-lg"}
                     >
                         <MusicPlayer/>
                     </motion.div>

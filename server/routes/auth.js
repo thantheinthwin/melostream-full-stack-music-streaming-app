@@ -90,6 +90,7 @@ const newUserData = async (decodeValue, req, res) => {
         user_id: decodeValue.user_id,
         password: decodeValue.password || "",
         ph_number: null,
+        likedSongs: [],
         email_verified: decodeValue.email_verified,
         role: "member",
         subscription: false,
