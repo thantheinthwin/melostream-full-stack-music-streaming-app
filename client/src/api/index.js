@@ -164,3 +164,20 @@ export const changeAccount = async (user_id) => {
         return null;
     }
 }
+
+export const likeSong = async (user_id, songId) => {
+    try {
+        const res = await axios.get(`${baseURL}api/songs/like/${user_id}/${songId}`)
+        return res.data;
+    } catch (error) {
+        return null;
+    }
+} 
+export const unLikeSong = async (user_id, songId) => {
+    try {
+        const res = await axios.get(`${baseURL}api/songs/unlike/${user_id}/${songId}`)
+        return res.data;
+    } catch (error) {
+        return null;
+    }
+} 

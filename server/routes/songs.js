@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 // Song model
 const song = require("../models/song");
+const user = require("../models/user");
 
 // Add New
 router.post('/save', async(req, res) => {
@@ -97,5 +98,94 @@ router.delete('/delete/:id', async (req, res) => {
         return res.status(400).send({success: false, msg: "Data not found", data: result});
     }
 });
+
+// Like a song
+router.get('/like/:id/:songid', async (req, res) => {
+    const filter = {user_id: req.params.id};
+    const songId = req.params.songid;
+
+    const data = await user.findOne(filter);
+
+    if (data){
+        const likedSongs = data.likedSongs;
+
+        if(!likedSongs.some(item => item == songId)){
+            if(likedSongs[0] == ''){
+                likedSongs.pop();
+                likedSongs.push(songId);
+            }
+            else {
+                likedSongs.push(songId)
+            }
+    
+            try {
+                const options = {
+                    upsert: true,
+                    new: true,
+                }
+                
+                const result = await user.findOneAndUpdate(
+                    {user_id: req.params.id},
+                    {
+                        likedSongs: likedSongs,
+                    },
+                    options
+                );
+    
+                res.status(200).send({user: result})
+            } catch (error) {
+                res.status(400).send({success: false, msg: error});
+            }
+        }
+        else {
+            return res.status(400).send({success: false, msg: 'You have already saved this song'})
+        }        
+        
+    }else{
+        return res.status(400).send({success: false, msg: 'Data not found'})
+    }
+})
+
+// Unlike a song
+router.get('/unlike/:id/:songid', async (req, res) => {
+    const filter = {user_id: req.params.id};
+    const songId = req.params.songid;
+
+    const data = await user.findOne(filter);
+
+    if(data){
+        const likedSongs = data.likedSongs;
+
+        if(likedSongs.some(item => item == songId)){
+            const index = likedSongs.indexOf(songId);
+            likedSongs.splice(index, 1);
+
+            try {
+                const options = {
+                    upsert: true,
+                    new: true,
+                }
+
+                const result = await user.findOneAndUpdate(
+                    {user_id: req.params.id},
+                    {
+                        likedSongs: likedSongs,
+                    },
+                    options
+                );
+
+                res.status(200).send({user: result})
+            } catch (error) {
+                res.status(400).send({success: false, mag: error})
+            }
+        }
+        else {
+            return res.status(400).send({success: false, msg: 'You have not liked this song'})
+        }
+    }
+    else {
+        return res.status(400).send({success: false, msg: 'Data not found'})
+    }
+})
 
 module.exports = router;
