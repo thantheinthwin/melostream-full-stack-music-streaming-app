@@ -70,7 +70,7 @@ const SongCard = ({data, index}) => {
   
   return (
     <AnimatePresence>
-      <div key={index} className="relative flex flex-col items-center col-span-1 gap-2 rounded-md cursor-pointer bg-neutral-900" onClick={addToContext}>
+      <div key={index} className="relative flex flex-col items-center col-span-1 gap-2 rounded-md cursor-pointer bg-neutral-900" >
         <div className='flex flex-col gap-2 p-2'> 
           <div className="relative w-full overflow-hidden rounded-md">
             <motion.img
@@ -79,6 +79,7 @@ const SongCard = ({data, index}) => {
               className="object-cover w-40 h-40 rounded-md"
               referrerPolicy="no-referrer"
               whileHover={{ scale: 1.05 }}
+              onClick={addToContext}
             />
           </div>
           <p className="text-base font-medium text-center">

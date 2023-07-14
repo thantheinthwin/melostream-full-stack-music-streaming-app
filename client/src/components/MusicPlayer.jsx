@@ -7,13 +7,16 @@ import { TbShare3 } from 'react-icons/tb'
 import { actionType } from '../context/reducer';
 
 import AudioPlayer from 'react-h5-audio-player'
-import { likeSong, unLikeSong } from '../api'
+import { getAllSongs, likeSong, unLikeSong } from '../api'
+import { useNavigate } from 'react-router-dom'
 
 const MusicPlayer = () => {
     const [{user, allSongs, songIndex, isSongPlaying, showMusicPlayer}, dispatch] = useStateValue();
     const [isLikeHover, setLikeHover] = useState(false);
     const [isLikeClicked, setLikeClicked] = useState(false);
     const [isLiked, setLiked] = useState(false);
+
+    const navigate = useNavigate();
 
     const hideMusicPlayer = () => {
         if(showMusicPlayer){
@@ -28,9 +31,12 @@ const MusicPlayer = () => {
      if(user?.user?.likedSongs.some(songId => songId == allSongs[songIndex]?._id)){
       setLiked(true);
       setLikeClicked(true);
-      // console.log('ran');
      }
-    },[user?.user?.likedSongs.some(songId => songId == allSongs[songIndex]?._id)])
+     else{
+      setLiked(false);
+      setLikeClicked(false);
+     }
+    },[songIndex])
 
   return (
     <div className="relative flex flex-col items-center w-full gap-2 md:flex-row lg:items-end">
@@ -44,7 +50,7 @@ const MusicPlayer = () => {
       </i>
       <img
         src={allSongs[songIndex]?.imageURL}
-        className="w-64 mt-12 rounded-lg md:mt-0 lg:w-40"
+        className="object-cover w-64 h-64 mt-12 rounded-lg md:mt-0 lg:w-40"
       />
       <div className="flex flex-col items-center w-full gap-2">
         <p className="text-2xl font-bold">{allSongs[songIndex]?.name}</p>
@@ -58,14 +64,14 @@ const MusicPlayer = () => {
               <AiOutlineHeart className="p-1 text-3xl" />
             ) : (
               <AiFillHeart
-                className="p-1 text-3xl"
+                className="p-1 text-3xl cursor-pointer"
                 onClick={() => {
                   if (!isLiked) {
                     likeSong(user?.user?.user_id, allSongs[songIndex]?._id);
                   } else {
                     unLikeSong(user?.user?.user_id, allSongs[songIndex]?._id);
                   }
-
+                  navigate(0);
                   setLikeClicked(!isLikeClicked);
                 }}
               />

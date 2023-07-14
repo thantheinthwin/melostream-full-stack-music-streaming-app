@@ -92,7 +92,7 @@ const Home = () => {
   )
 }
 
-const SongContainer = ({data}) => {
+export const SongContainer = ({data}) => {
   return (
     <div className='grid grid-cols-2 w-full h-fit max-h-[calc(100%-10rem)] gap-2 overflow-y-scroll p-2 lg:grid-cols-6 xl:grid-cols-8'>
       {data && data.map((song, i) => <SongCard key={song._id} data={song} index={i}/>)}
