@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStateValue } from '../context/StateProvider'
 
 import { GrClose } from 'react-icons/gr'
@@ -13,7 +13,7 @@ const MusicPlayer = () => {
     const [{user, allSongs, songIndex, isSongPlaying, showMusicPlayer}, dispatch] = useStateValue();
     const [isLikeHover, setLikeHover] = useState(false);
     const [isLikeClicked, setLikeClicked] = useState(false);
-    const [isLiked, setLiked] = useState(true);
+    const [isLiked, setLiked] = useState(false);
 
     const hideMusicPlayer = () => {
         if(showMusicPlayer){
@@ -24,9 +24,18 @@ const MusicPlayer = () => {
         }
     }
 
+    useEffect(()=>{
+     if(user?.user?.likedSongs.some(songId => songId == allSongs[songIndex]?._id)){
+      setLiked(true);
+      setLikeClicked(true);
+      // console.log('ran');
+     }
+    },[user?.user?.likedSongs.some(songId => songId == allSongs[songIndex]?._id)])
+
   return (
     <div className="relative flex flex-col items-center w-full gap-2 md:flex-row lg:items-end">
-      {console.log(user)}
+      {/* {console.log(user)} */}
+      {/* {console.log(allSongs[songIndex])} */}
       <i
         className="absolute top-0 right-0 p-2 m-1 bg-white rounded-md bg-opacity-30 hover:bg-opacity-40 lg:m-0 lg:bg-opacity-10 lg:p-1"
         onClick={hideMusicPlayer}
