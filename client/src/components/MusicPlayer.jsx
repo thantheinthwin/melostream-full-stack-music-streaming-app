@@ -26,7 +26,7 @@ const MusicPlayer = () => {
 
   return (
     <div className="relative flex flex-col items-center w-full gap-2 md:flex-row lg:items-end">
-        {console.log(user?.user?.user_id)}
+      {console.log(user)}
       <i
         className="absolute top-0 right-0 p-2 m-1 bg-white rounded-md bg-opacity-30 hover:bg-opacity-40 lg:m-0 lg:bg-opacity-10 lg:p-1"
         onClick={hideMusicPlayer}
@@ -48,24 +48,33 @@ const MusicPlayer = () => {
             {!isLikeHover && !isLikeClicked ? (
               <AiOutlineHeart className="p-1 text-3xl" />
             ) : (
-              <AiFillHeart className="p-1 text-3xl" onClick={() => {
-                if(!isLiked){
-                    likeSong(user?.user?.user_id, allSongs[songIndex]?._id)
-                }
-                else {
-                    unLikeSong(user?.user?.user_id, allSongs[songIndex]?._id)
-                }
-                
-                setLikeClicked(!isLikeClicked)
-              }} />
+              <AiFillHeart
+                className="p-1 text-3xl"
+                onClick={() => {
+                  if (!isLiked) {
+                    likeSong(user?.user?.user_id, allSongs[songIndex]?._id);
+                  } else {
+                    unLikeSong(user?.user?.user_id, allSongs[songIndex]?._id);
+                  }
+
+                  setLikeClicked(!isLikeClicked);
+                }}
+              />
             )}
           </i>
           <p>
             {allSongs[songIndex]?.artist} ( {allSongs[songIndex]?.album} )
           </p>
-          <i className="text-2xl text-accent">
-            <TbShare3 />
-          </i>
+          {user?.user?.subscription ? (
+            <i className="text-2xl text-accent">
+              <TbShare3 />
+            </i>
+          ) : (
+            <i className="relative">
+              <TbShare3 className='text-2xl peer text-zinc-600'/>
+              <p className='absolute right-0 z-40 hidden p-1 text-sm text-center transition-all duration-500 ease-in-out rounded-lg w-44 peer-hover:flex bg-neutral-700'>Subscribe to be able to share your favourite songs</p>
+            </i>
+          )}
         </div>
         <AudioPlayer
           src={allSongs[songIndex]?.songURL}
