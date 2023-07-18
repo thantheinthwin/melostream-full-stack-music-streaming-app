@@ -1,21 +1,19 @@
+import React, { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth';
 import { app } from '../config/firebase.config';
-import React, { useEffect, useState } from 'react'
 
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { BiCrown, BiUser } from 'react-icons/bi'
 import { GrUserAdmin } from 'react-icons/gr'
 import { TfiMicrophone } from 'react-icons/tfi'
 import { Turn as Hamburger } from 'hamburger-react'
-
-import { Logo } from '../assets/img';
+import { IoCloseOutline } from 'react-icons/io5'
 
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useStateValue } from '../context/StateProvider';
 
 import { isActiveDashboardNav, isNotActiveDashboardNav } from '../utils/styles';
-import { changeAccount } from '../api';
+import { addArtist, changeAccount } from '../api';
 import { actionType } from '../context/reducer';
 
 const Navigation = (props) => {  
@@ -27,8 +25,45 @@ const Navigation = (props) => {
   const email = user?.user?.email;
   const role = user?.user?.role;
   const user_id = user?.user?.user_id;
-
+  
   const defaultImageURL = 'https://firebasestorage.googleapis.com/v0/b/mcc-music-web-project.appspot.com/o/images%2Fdefault%2Fprofile.webp?alt=media&token=97a1ef47-11ea-42ee-b397-3afb9f7aac75';
+
+  const [artistData, setArtistData] = useState({
+    soundcloud: '',
+    youtube: ''
+  })
+
+  const handle = (e) => {
+    const newData = {...artistData}
+    newData[e.target.id] = e.target.value
+    setArtistData(newData)
+  }
+
+  // Changing account type
+  const changeAccountType = (user_id) => {
+    changeAccount(user_id).then((res) => {
+      dispatch({
+        type: actionType.SET_USER,
+        user: res
+      })
+    }).catch((error) => {
+      console.log(error);
+    }).then(() => {alert("User Account Changed")})
+  }
+
+  const saveArtist = () => {
+    const data = {
+      name: username,
+      imageURL: user?.user?.imageURL ? user?.user?.imageURL : defaultImageURL,
+      soundcloud: artistData.soundcloud,
+      youtube: artistData.youtube
+    }
+
+    addArtist(data).then(() => {
+      changeAccountType(user_id);
+      setArtistProfile(false)
+    });
+  }
 
   let userIcon ;
 
@@ -101,17 +136,7 @@ const Navigation = (props) => {
     }
   ]
 
-  // Changing account type
-  const changeAccountType = (user_id) => {
-    changeAccount(user_id).then((res) => {
-      dispatch({
-        type: actionType.SET_USER,
-        user: res
-      })
-    }).catch((error) => {
-      console.log(error);
-    }).then(() => {alert("User Account Changed")})
-  }
+  const [artistProfile, setArtistProfile] = useState(false);
 
   return (
     <div className='flex items-center justify-between w-full text-white bg-neutral-900'>     
@@ -152,7 +177,7 @@ const Navigation = (props) => {
             </div>}
             <div className="py-1" role="none">
               <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out select-none hover:bg-neutral-700' onClick={() => {openProfile(); setIsMenu(false)}}>Profile</div>
-              {(role === 'member') && <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700' onClick={() => {changeAccountType(user_id)}}>Change account type</div>}
+              {(role === 'member') && <div className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700' onClick={() => {setArtistProfile(true)}}>Change account type</div>}
               {role === 'artist' && <NavLink to={"/user/mysongs"} className='block px-4 py-2 text-sm transition-all duration-200 ease-in-out hover:bg-neutral-700'>My Songs</NavLink>}
             </div>
             {(isAdmin && !isDashboardBranch)  && <div className='py-1' role='none'>
@@ -164,6 +189,53 @@ const Navigation = (props) => {
           </motion.div>
         )}
       </div>
+      { artistProfile && 
+        <motion.div className='absolute top-0 bottom-0 left-0 right-0 z-50 grid p-4 m-auto bg-neutral-800 w-fit h-fit'>
+          <div className='flex justify-between mb-10'>
+            <p className='text-xl'>Profile Setting</p>
+            <i className='p-1 transition-all duration-200 ease-in-out rounded-md cursor-pointer hover:bg-neutral-700' onClick={()=>{setArtistProfile(false)}}><IoCloseOutline/></i>
+          </div>
+          <div className='grid gap-4'> 
+            <div className="relative">
+              <input
+                id="soundcloud"
+                name="soundcloud"
+                type="text"
+                placeholder="soundcloud"
+                value={artistData.soundcloud}
+                onChange={(e) => handle(e)}
+                required
+                className="w-full h-8 text-sm placeholder-transparent bg-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
+              ></input>
+              <label
+                htmlFor="soundcloud"
+                className="absolute px-1 text-sm transition-all select-none bg-neutral-800 md:text-base -top-4 left-2 peer-placeholder-shown:left-2 peer-placeholder-shown:top-1 peer-focus:-top-4 peer-focus:left-2 peer-focus:bg-neutral-800 peer-focus:px-1 peer-focus:text-sm peer-focus:text-blue-300"
+              >
+                Soundcloud link
+              </label>
+            </div>
+            <div className="relative">
+              <input
+                id="youtube"
+                name="youtube"
+                type="text"
+                placeholder="youtube"
+                value={artistData.youtube}
+                onChange={(e) => handle(e)}
+                required
+                className="w-full h-8 text-sm placeholder-transparent bg-transparent border border-gray-300 rounded-md md:py-2 md:text-base peer caret-blue-300 focus:rounded-md focus:border-0 focus:ring-2 focus:ring-inset focus:ring-blue-300"
+              ></input>
+              <label
+                htmlFor="youtube"
+                className="absolute px-1 text-sm transition-all select-none bg-neutral-800 md:text-base -top-4 left-2 peer-placeholder-shown:left-2 peer-placeholder-shown:top-1 peer-focus:-top-4 peer-focus:left-2 peer-focus:bg-neutral-800 peer-focus:px-1 peer-focus:text-sm peer-focus:text-blue-300"
+              >
+                Youtube link
+              </label>
+            </div>
+            <div className='p-2 transition-all duration-200 ease-in-out bg-green-600 rounded-md cursor-pointer hover:bg-green-700 justify-self-end' onClick={()=>{saveArtist()}}>Save</div>
+          </div>
+        </motion.div>
+      }
     </div>
   )
 }

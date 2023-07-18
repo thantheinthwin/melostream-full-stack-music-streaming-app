@@ -129,6 +129,15 @@ export const removeAlbum = async (albumId) => {
     }
 }
 
+export const addArtist = async (data) => {
+    try {
+        const res = axios.post(`${baseURL}api/artists/save`, {...data});
+        return (await res).data.artist;
+    } catch (error) {
+        return null;
+    }
+}
+
 export const removeArtist = async (artistId) => {
     try {
         const res = await axios.delete(`${baseURL}api/artists/delete/${artistId}`);
