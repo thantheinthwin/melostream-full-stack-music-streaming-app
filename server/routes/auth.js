@@ -241,4 +241,25 @@ router.get('/changeAccountType/:id', async (req, res) => {
     }
 })
 
+// set subscription
+router.get('/purchase/:id', async (req, res) => {
+    const options = {
+        upsert: true,
+        new: true,
+    }
+
+    try {
+        const result = await user.findOneAndUpdate(
+            {user_id: req.params.id},
+            {
+                subscription: true
+            },
+            options
+        )
+        res.status(200).send({user: result});
+    } catch (error) {
+        res.status(400).send({success: false, message: error});
+    }
+})
+
 module.exports = router;

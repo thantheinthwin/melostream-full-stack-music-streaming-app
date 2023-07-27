@@ -9,11 +9,15 @@ import { BsShieldCheck } from 'react-icons/bs'
 import { MdOutlineArrowBackIos } from 'react-icons/md'
 
 import { CreditCard } from '../assets/img';
+import { purchase } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const Subscribe = () => {
   const [{user}, dispatch] = useStateValue();
   const [selectedOption, setSelectedOption] = useState(null);
   const [clicked, setClicked] = useState(false);
+
+  const navigate = useNavigate();
 
   const onValueChange = (e) => {
     setSelectedOption(e.target.value);
@@ -26,19 +30,18 @@ const Subscribe = () => {
         user: getAuth(app).currentUser
       })
     }
-  },[])
+  },[user])
 
   // console.log(selectedOption);
   return (
     <div className="flex h-full max-h-[calc(100%-7rem)] w-full overflow-y-scroll p-2 md:items-center md:overflow-y-hidden md:p-4 lg:max-h-[calc(100%-2rem)]">
-      {
-        user?.user?.subscription && 
-        <div className='flex items-center justify-center w-full p-8 bg-secondary'>
-          <p className='text-3xl'>You have already subscribed</p>
+      {user?.user?.subscription && (
+        <div className="flex items-center justify-center w-full p-8 bg-secondary">
+          <p className="text-3xl">You have already subscribed</p>
         </div>
-      }
+      )}
 
-      {(!clicked && !user?.user?.subscription) && (
+      {!clicked && !user?.user?.subscription && (
         <div className="grid items-center w-full gap-4 py-6 mt-2 mb-6 rounded-lg h-fit justify-evenly bg-secondary md:px-10 md:py-20 lg:flex">
           <div className="flex flex-col gap-2 px-6 w-fit">
             {user && (
@@ -51,7 +54,7 @@ const Subscribe = () => {
             </p>
           </div>
           <div className="flex flex-col gap-3 px-6 w-fit">
-            <div className='select-none'>
+            <div className="select-none">
               <input
                 type="radio"
                 id="basic"
@@ -82,7 +85,7 @@ const Subscribe = () => {
                 </div>
               </label>
             </div>
-            <div className='select-none'>
+            <div className="select-none">
               <input
                 type="radio"
                 id="student"
@@ -114,7 +117,7 @@ const Subscribe = () => {
                 </div>
               </label>
             </div>
-            <div className='select-none'>
+            <div className="select-none">
               <input
                 type="radio"
                 id="premium"
@@ -150,11 +153,10 @@ const Subscribe = () => {
               type="button"
               className="inline-block p-3 mt-6 transition-all duration-200 ease-in-out rounded-lg bg-accent hover:bg-purple-700"
               onClick={() => {
-                if(selectedOption !== null){
+                if (selectedOption !== null) {
                   setClicked(true);
-                }
-                else {
-                  alert('Choose a plan');
+                } else {
+                  alert("Choose a plan");
                 }
               }}
             >
@@ -165,9 +167,9 @@ const Subscribe = () => {
       )}
 
       {/* Last Step */}
-      {(clicked && !user?.user?.subscription) && (
+      {clicked && !user?.user?.subscription && (
         <div className="relative grid items-center w-full gap-12 px-2 py-6 mt-2 mb-6 rounded-lg h-fit justify-evenly bg-secondary md:px-8 md:py-20 lg:flex lg:gap-0">
-          <div className="flex flex-col gap-2 px-6 mt-8 md:mt-0 w-fit">
+          <div className="flex flex-col gap-2 px-6 mt-8 w-fit md:mt-0">
             {user && (
               <p className="text-lg uppercase text-accent md:text-base xl:text-lg">
                 The last step
@@ -194,8 +196,8 @@ const Subscribe = () => {
                   id="ccn"
                   type="number"
                   pattern="[0-9\s]{13,19}"
-                  autocomplete="cc-number"
-                  maxlength="19"
+                  autoComplete="cc-number"
+                  maxLength="19"
                   placeholder="xxxx xxxx xxxx xxxx"
                   className="bg-transparent border rounded-md"
                 />
@@ -235,20 +237,34 @@ const Subscribe = () => {
               <button
                 type="button"
                 className="inline-block p-2 mt-4 bg-green-500 rounded-md"
+                onClick={() => {
+                  purchase(user?.user?.user_id).then(() => {
+                    console.log(user?.user?.user_id);
+                    alert("Subscription successful");
+                    navigate('/user/home')
+                  });
+                }}
               >
                 Purchase
               </button>
             </div>
-            <div className="inline-flex items-center justify-center px-8 pb-8">
+            {/* <div className="inline-flex items-center justify-center px-8 pb-8">
               <p className="flex items-center gap-2 text-sm text-gray-500">
                 Secured by <span className="text-xl font-bold">Stripe</span>{" "}
                 <i className="text-lg">
                   <BsShieldCheck />
                 </i>
               </p>
-            </div>
+            </div> */}
           </div>
-          <i className='absolute top-0 left-0 p-2 m-5 transition-all duration-200 ease-in-out rounded-lg hover:bg-accent' onClick={()=>{setClicked(false)}}><MdOutlineArrowBackIos/></i>
+          <i
+            className="absolute top-0 left-0 p-2 m-5 transition-all duration-200 ease-in-out rounded-lg hover:bg-accent"
+            onClick={() => {
+              setClicked(false);
+            }}
+          >
+            <MdOutlineArrowBackIos />
+          </i>
         </div>
       )}
     </div>

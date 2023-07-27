@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { sync } from 'framer-motion';
 
 const baseURL = "http://localhost:4000/";
 
@@ -190,3 +191,12 @@ export const unLikeSong = async (user_id, songId) => {
         return null;
     }
 } 
+
+export const purchase = async (user_id) => {
+    try {
+        const res = axios.get(`${baseURL}api/users/purchase/${user_id}`);
+        return res.data;
+    } catch (error) {
+        return null;
+    }
+}
