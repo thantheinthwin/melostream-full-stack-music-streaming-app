@@ -10,7 +10,6 @@ import { BsTrash } from 'react-icons/bs';
 const ArtistCard = ({data, index}) => {
     const [isDeleteConfirm, setDeleteConfirm] = useState(false);
     const[{allArtists}, dispatch] = useStateValue();
-    const totalSongs = useRef(0);
 
     const deleteArtist = (artistId) => {
         removeArtist(artistId).then((res) => {
@@ -30,7 +29,7 @@ const ArtistCard = ({data, index}) => {
             <motion.img
               src={data.imageURL}
               alt=""
-              className="object-cover w-full h-full rounded-md"
+              className="object-cover rounded-md w-52 h-52"
               referrerPolicy="no-referrer"
               whileHover={{ scale: 1.05 }}
             />
@@ -48,7 +47,7 @@ const ArtistCard = ({data, index}) => {
                 : data.soundcloud}
             </a>
             <div className="flex items-center justify-between">
-              <span>{totalSongs.current} songs</span>
+              {/* <span>1 song</span> */}
               <div
                 className="p-2 rounded-lg w-fit hover:bg-neutral-700"
                 onClick={() => setDeleteConfirm(!isDeleteConfirm)}

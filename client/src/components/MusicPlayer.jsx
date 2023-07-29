@@ -39,22 +39,22 @@ const MusicPlayer = () => {
     },[songIndex])
 
   return (
-    <div className="relative flex w-full flex-col items-center gap-2 md:flex-row lg:items-end">
+    <div className="relative flex flex-col items-center w-full gap-2 md:flex-row lg:items-end">
       {/* {console.log(user)} */}
       {/* {console.log(allSongs[songIndex])} */}
       <i
-        className="absolute right-0 top-0 m-1 rounded-md bg-white bg-opacity-30 p-2 hover:bg-opacity-40 lg:m-0 lg:bg-opacity-10 lg:p-1"
+        className="absolute top-0 right-0 p-2 m-1 bg-white rounded-md bg-opacity-30 hover:bg-opacity-40 lg:m-0 lg:bg-opacity-10 lg:p-1"
         onClick={hideMusicPlayer}
       >
         <GrClose />
       </i>
       <img
         src={allSongs[songIndex]?.imageURL}
-        className="mt-12 h-64 w-64 rounded-lg object-cover md:mt-0 lg:h-40 lg:w-40"
+        className="object-cover w-64 h-64 mt-12 rounded-lg md:mt-0 lg:h-40 lg:w-40"
       />
-      <div className="flex w-full flex-col items-center gap-2">
+      <div className="flex flex-col items-center w-full gap-2">
         <p className="text-2xl font-bold">{allSongs[songIndex]?.name}</p>
-        <div className="flex w-full justify-between px-4">
+        <div className="flex justify-between w-full px-4">
           <i
             className="text-accent"
             onMouseEnter={() => setLikeHover(true)}
@@ -64,13 +64,14 @@ const MusicPlayer = () => {
               <AiOutlineHeart className="p-1 text-3xl" />
             ) : (
               <AiFillHeart
-                className="cursor-pointer p-1 text-3xl"
+                className="p-1 text-3xl cursor-pointer"
                 onClick={() => {
                   if (!isLiked) {
                     likeSong(user?.user?.user_id, allSongs[songIndex]?._id);
                   } else {
                     unLikeSong(user?.user?.user_id, allSongs[songIndex]?._id);
                   }
+                  navigate('/user/home');
                   navigate(0);
                   setLikeClicked(!isLikeClicked);
                 }}
@@ -82,7 +83,7 @@ const MusicPlayer = () => {
           </p>
           {user?.user?.subscription ? (
             <i
-              className="text-2xl text-accent cursor-pointer"
+              className="text-2xl cursor-pointer text-accent"
               onClick={async () => {
                 await navigator.clipboard.writeText(window.location.href)
                 alert('Link have been saved in you clipboard');
@@ -92,8 +93,8 @@ const MusicPlayer = () => {
             </i>
           ) : (
             <i className="relative">
-              <TbShare3 className="peer text-2xl text-zinc-600" />
-              <p className="absolute right-0 z-40 hidden w-44 rounded-lg bg-neutral-700 p-1 text-center text-sm transition-all duration-500 ease-in-out peer-hover:flex">
+              <TbShare3 className="text-2xl peer text-zinc-600" />
+              <p className="absolute right-0 z-40 hidden p-1 text-sm text-center transition-all duration-500 ease-in-out rounded-lg w-44 bg-neutral-700 peer-hover:flex">
                 Subscribe to be able to share your favourite songs
               </p>
             </i>

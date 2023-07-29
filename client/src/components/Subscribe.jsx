@@ -241,7 +241,7 @@ const Subscribe = () => {
                   purchase(user?.user?.user_id).then(() => {
                     console.log(user?.user?.user_id);
                     alert("Subscription successful");
-                    navigate('/user/home')
+                    navigate('/user/home', {replace: true})
                   });
                 }}
               >

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { sync } from 'framer-motion';
 
 const baseURL = "http://localhost:4000/";
 
