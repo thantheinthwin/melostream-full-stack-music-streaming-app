@@ -5,7 +5,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { RxCross1 } from 'react-icons/rx';
 
 import { useStateValue } from '../../context/StateProvider';
-import { getAllArtists } from '../../api';
+import { getAllArtists, getAllSongs } from '../../api';
 import { actionType } from '../../context/reducer';
 
 import { ArtistCard } from '../Cards';
@@ -14,9 +14,18 @@ const DashboardArtists = () => {
   const [artistFilter, setArtistFilter] = useState("");
   const [filteredArtists, setFilteredArtists] = useState(null);
 
-  const [{allArtists}, dispatch] = useStateValue();
+  const [{allSongs, allArtists}, dispatch] = useStateValue();
 
   useEffect(() => {
+    if(!allSongs){
+      getAllSongs().then((data => {
+        dispatch({
+          type: actionType.SET_ALL_SONGS,
+          allSongs: data.song
+        })
+      }))
+    }
+
     if(!allArtists){
       getAllArtists().then((data) => {
         dispatch({
@@ -25,7 +34,7 @@ const DashboardArtists = () => {
         })
       })
     }
-  }, [allArtists])
+  }, [allArtists, allSongs])
 
   useEffect(() => {
     if (artistFilter.length > 0) {

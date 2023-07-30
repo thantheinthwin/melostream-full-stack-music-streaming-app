@@ -15,12 +15,14 @@ import { useNavigate } from 'react-router-dom';
 const Subscribe = () => {
   const [{user}, dispatch] = useStateValue();
   const [selectedOption, setSelectedOption] = useState(null);
+  const [productId, setProductId] = useState(null);
   const [clicked, setClicked] = useState(false);
 
   const navigate = useNavigate();
 
   const onValueChange = (e) => {
     setSelectedOption(e.target.value);
+    setProductId(e.target.id)
   }
 
   useEffect(()=>{
@@ -57,7 +59,7 @@ const Subscribe = () => {
             <div className="select-none">
               <input
                 type="radio"
-                id="basic"
+                id="price_1NZDoHJf8SCWWuDoxWYAbLoD"
                 name="plan"
                 value="basic"
                 className="hidden peer"
@@ -66,7 +68,7 @@ const Subscribe = () => {
                 onChange={(e) => onValueChange(e)}
               />
               <label
-                htmlFor="basic"
+                htmlFor="price_1NZDoHJf8SCWWuDoxWYAbLoD"
                 className="inline-flex items-center justify-between w-full gap-2 p-5 text-gray-400 transition-all duration-200 ease-in-out border-2 border-gray-700 rounded-lg cursor-pointer bg-violet-900 bg-opacity-10 hover:bg-purple-900 hover:bg-opacity-20 peer-checked:border-accent peer-checked:text-accent"
               >
                 <div className="block max-w-md">
@@ -88,7 +90,7 @@ const Subscribe = () => {
             <div className="select-none">
               <input
                 type="radio"
-                id="student"
+                id="price_1NZDpAJf8SCWWuDoT4nDbGUb"
                 name="plan"
                 value="student"
                 className="hidden peer"
@@ -97,7 +99,7 @@ const Subscribe = () => {
                 onChange={(e) => onValueChange(e)}
               />
               <label
-                htmlFor="student"
+                htmlFor="price_1NZDpAJf8SCWWuDoT4nDbGUb"
                 className="inline-flex items-center justify-between w-full gap-2 p-5 text-gray-400 transition-all duration-200 ease-in-out border-2 border-gray-700 rounded-lg cursor-pointer bg-violet-900 bg-opacity-10 hover:bg-purple-900 hover:bg-opacity-20 peer-checked:border-accent peer-checked:text-accent"
               >
                 <div className="block max-w-md">
@@ -120,7 +122,7 @@ const Subscribe = () => {
             <div className="select-none">
               <input
                 type="radio"
-                id="premium"
+                id="price_1NZDqIJf8SCWWuDoNHNZBNbc"
                 name="plan"
                 value="premium"
                 className="hidden peer"
@@ -129,7 +131,7 @@ const Subscribe = () => {
                 onChange={(e) => onValueChange(e)}
               />
               <label
-                htmlFor="premium"
+                htmlFor="price_1NZDqIJf8SCWWuDoNHNZBNbc"
                 className="inline-flex items-center justify-between w-full gap-2 p-5 text-gray-400 transition-all duration-200 ease-in-out border-2 border-gray-700 rounded-lg cursor-pointer bg-violet-900 bg-opacity-10 hover:bg-purple-900 hover:bg-opacity-20 peer-checked:border-accent peer-checked:text-accent"
               >
                 <div className="block max-w-md">
@@ -154,6 +156,26 @@ const Subscribe = () => {
               className="inline-block p-3 mt-6 transition-all duration-200 ease-in-out rounded-lg bg-accent hover:bg-purple-700"
               onClick={() => {
                 if (selectedOption !== null) {
+                  switch(selectedOption){
+                    case 'basic':
+                      break;
+                    case 'student':
+                      purchase(user?.user?.user_id).then(() => {
+                        console.log(user?.user?.user_id);
+                        navigate('/user/home', {replace: true})
+                        window.location.assign('https://buy.stripe.com/test_9AQ02Vb9cf3x4a4144')
+                      });
+                      break;
+                    case 'premium':
+                      purchase(user?.user?.user_id).then(() => {
+                        console.log(user?.user?.user_id);
+                        navigate('/user/home', {replace: true})
+                        window.location.assign('https://buy.stripe.com/test_6oE3f7dhk6x1dKEbIJ')
+                      });
+                      break;
+                    default:
+                      break;
+                  }
                   setClicked(true);
                 } else {
                   alert("Choose a plan");
@@ -166,7 +188,7 @@ const Subscribe = () => {
         </div>
       )}
 
-      {/* Last Step */}
+      {/* Last Step
       {clicked && !user?.user?.subscription && (
         <div className="relative grid items-center w-full gap-12 px-2 py-6 mt-2 mb-6 rounded-lg h-fit justify-evenly bg-secondary md:px-8 md:py-20 lg:flex lg:gap-0">
           <div className="flex flex-col gap-2 px-6 mt-8 w-fit md:mt-0">
@@ -248,14 +270,14 @@ const Subscribe = () => {
                 Purchase
               </button>
             </div>
-            {/* <div className="inline-flex items-center justify-center px-8 pb-8">
+            <div className="inline-flex items-center justify-center px-8 pb-8">
               <p className="flex items-center gap-2 text-sm text-gray-500">
                 Secured by <span className="text-xl font-bold">Stripe</span>{" "}
                 <i className="text-lg">
                   <BsShieldCheck />
                 </i>
               </p>
-            </div> */}
+            </div>
           </div>
           <i
             className="absolute top-0 left-0 p-2 m-5 transition-all duration-200 ease-in-out rounded-lg hover:bg-accent"
@@ -266,7 +288,7 @@ const Subscribe = () => {
             <MdOutlineArrowBackIos />
           </i>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

@@ -9,7 +9,7 @@ import { BsTrash } from 'react-icons/bs';
 
 const ArtistCard = ({data, index}) => {
     const [isDeleteConfirm, setDeleteConfirm] = useState(false);
-    const[{allArtists}, dispatch] = useStateValue();
+    const[{allSongs, allArtists}, dispatch] = useStateValue();
 
     const deleteArtist = (artistId) => {
         removeArtist(artistId).then((res) => {
@@ -22,6 +22,8 @@ const ArtistCard = ({data, index}) => {
         });
     }
     
+    console.log();
+    
     return (
       <AnimatePresence>
         <motion.div className="relative grid items-center grid-flow-col grid-cols-5 col-span-1 gap-2 p-2 rounded-md shadow-md cursor-pointer bg-neutral-900 lg:col-span-2">
@@ -29,12 +31,12 @@ const ArtistCard = ({data, index}) => {
             <motion.img
               src={data.imageURL}
               alt=""
-              className="object-cover rounded-md w-52 h-52"
+              className="object-cover rounded-md h-52 w-52"
               referrerPolicy="no-referrer"
               whileHover={{ scale: 1.05 }}
             />
           </div>
-          <div className="grid col-span-3 gap-1 px-2 text-sm">
+          <div className="grid col-span-3 gap-2 px-2 text-sm">
             <span className="col-span-full">{data.name}</span>
             <a href={data.youtube} className="col-span-full">
               {data.youtube.length > 15
@@ -47,7 +49,20 @@ const ArtistCard = ({data, index}) => {
                 : data.soundcloud}
             </a>
             <div className="flex items-center justify-between">
-              {/* <span>1 song</span> */}
+              <span>
+                {allSongs.filter((song) => song.artist == data.name).length >
+                1 ? (
+                  <span className="p-2 bg-white rounded-md bg-opacity-20">
+                    {allSongs.filter((song) => song.artist == data.name).length}{" "}
+                    songs
+                  </span>
+                ) : (
+                  <span className="p-2 bg-white rounded-md bg-opacity-20">
+                    {allSongs.filter((song) => song.artist == data.name).length}{" "}
+                    song
+                  </span>
+                )}
+              </span>
               <div
                 className="p-2 rounded-lg w-fit hover:bg-neutral-700"
                 onClick={() => setDeleteConfirm(!isDeleteConfirm)}
@@ -58,28 +73,31 @@ const ArtistCard = ({data, index}) => {
           </div>
           <AnimatePresence>
             {isDeleteConfirm && (
-                <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ ease: "easeInOut", duration: 1 }}
-                className="absolute grid items-center w-full h-full grid-cols-2 grid-rows-2 gap-2 p-2 rounded-md bg-neutral-800">
+                className="absolute grid items-center w-full h-full grid-cols-2 grid-rows-2 gap-2 p-2 rounded-md bg-neutral-800"
+              >
                 <p className="col-span-2 row-span-1 text-center">
-                    Are you sure you want to delete?
+                  Are you sure you want to delete?
                 </p>
                 <span
-                    className="col-span-1 row-span-1 p-2 text-center text-white transition-all duration-200 ease-in-out bg-green-500 rounded-lg hover:bg-green-600"
-                    onClick={() => {deleteArtist(data._id)}}
+                  className="col-span-1 row-span-1 p-2 text-center text-white transition-all duration-200 ease-in-out bg-green-500 rounded-lg hover:bg-green-600"
+                  onClick={() => {
+                    deleteArtist(data._id);
+                  }}
                 >
-                    Yes
+                  Yes
                 </span>
                 <span
-                    className="col-span-1 row-span-1 p-2 text-center text-white transition-all duration-200 ease-in-out bg-red-500 rounded-lg hover:bg-red-600"
-                    onClick={() => setDeleteConfirm(false)}
+                  className="col-span-1 row-span-1 p-2 text-center text-white transition-all duration-200 ease-in-out bg-red-500 rounded-lg hover:bg-red-600"
+                  onClick={() => setDeleteConfirm(false)}
                 >
-                    No
+                  No
                 </span>
-                </motion.div>
+              </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
