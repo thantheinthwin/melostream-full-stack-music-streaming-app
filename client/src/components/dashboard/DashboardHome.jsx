@@ -15,16 +15,16 @@ import { HiOutlineMusicalNote } from 'react-icons/hi2';
 
 const DashboardHome = () => {
   const [{allUsers, allSongs, allArtists, allAlbums}, dispatch] = useStateValue();
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date().getMonth()-1;
 
   useEffect(() => {
-    if(!allUsers){
+    if (!allUsers) {
       getAllUsers().then((data) => {
         dispatch({
           type: actionType.SET_ALL_USERS,
-          allUsers: data.data
-        })
-      })
+          allUsers: data.data,
+        });
+      });
     }
 
     if(!allArtists){
@@ -55,32 +55,14 @@ const DashboardHome = () => {
     }
   }, []) 
 
-  console.log(allUsers.map(user => user.createdAt).filter(dateString => {
-    const date = new Date(dateString);
-    return date.getMonth() === currentMonth;
-  }).length);
-
   return (
     <div className='flex flex-col items-center w-full col-span-6 gap-8 p-6 mt-10 lg:col-start-2'>
       <Tabs allUsers={allUsers} allArtists={allArtists} allSongs={allSongs} allAlbums={allAlbums}/>
-      <div className='grid w-5/6 grid-cols-2 gap-6'>
-        <div className='flex flex-col items-center justify-center p-2 rounded-md bg-neutral-600'>
-          <span className='text-xl font-semibold'>Subscribed users</span>
-          <span className='text-6xl font-semibold'>{allUsers.filter(user => user.subscription == true).length}</span>
-        </div>
-        <div className='flex flex-col items-center justify-center p-2 rounded-md bg-neutral-600'>
-          <span className='text-xl font-semibold'>Monthly New User</span>
-          <span className='text-6xl font-semibold'>
-            {
-              allUsers
-              .map(user => user.createdAt)
-              .filter(dateString => {
-                const date = new Date(dateString);
-                return date.getMonth() === currentMonth;
-              }).length
-            }
-          </span>
-        </div>
+      <div className='grid w-5/6 grid-cols-1 gap-6 lg:grid-cols-2'>
+        <SubscribedUsers allUsers={allUsers}/>
+        <MonthlyNewUsers allUsers={allUsers} currentMonth={currentMonth}/>
+        <MonthlyUpload allSongs={allSongs} currentMonth={currentMonth}/>
+        {allSongs && <MostPlayedSong allSongs={allSongs} currentMonth={currentMonth}/>}
       </div>
     </div>
   );
@@ -172,5 +154,83 @@ const DashboardCard = ({ icon, name, count }) => {
     </div>
   );
 };
+
+const SubscribedUsers = ({allUsers}) => {
+  return (
+    <div className='flex flex-col items-center justify-center col-span-1 p-2 rounded-md bg-neutral-600'>
+      <span className='text-xl font-semibold'>Subscribed users</span>
+      <span className='text-6xl font-semibold'>
+        {
+          allUsers && 
+          allUsers.filter(user => user.subscription == true).length
+        }
+      </span>
+    </div>
+  )
+}
+
+const MonthlyNewUsers = ({allUsers, currentMonth}) => {
+  
+  return (
+    <div className='flex flex-col items-center justify-center col-span-1 p-2 rounded-md bg-neutral-600'>
+      <span className='text-xl font-semibold'>Monthly New User</span>
+      <span className='text-6xl font-semibold'>
+        {
+          allUsers &&
+          allUsers
+          .map(user => user.createdAt)
+          .filter(dateString => {
+            const date = new Date(dateString);
+            return date.getMonth() === currentMonth;
+          }).length
+        }
+      </span>
+    </div>
+  )
+}
+
+const MonthlyUpload = ({allSongs, currentMonth}) => {
+   
+  return (
+    <div className='flex flex-col items-center justify-center col-span-1 p-2 rounded-md bg-neutral-600'>
+      <span className='text-xl font-semibold'>Monthly Upload</span>
+      <span className='text-6xl font-semibold'>
+        {
+          allSongs &&
+          allSongs
+          .map(song => song.createdAt)
+          .filter(dateString => {
+            const date = new Date(dateString);
+            return date.getMonth() === currentMonth;
+          }).length
+        }
+      </span>
+    </div>
+  )
+}
+
+const MostPlayedSong = ({allSongs, currentMonth}) => {
+  const favSong = allSongs.filter(song => song.songPlayed == Math.max(...allSongs.map(song => song.songPlayed)))
+    
+  return (
+    <div className='flex flex-col items-center justify-center gap-2 p-2 rounded-md col-span-full bg-neutral-600'>
+      <span className='text-4xl font-semibold text-center'>Most Played Song</span>
+      {
+        allSongs &&
+        <div className='grid content-center grid-cols-1 gap-2 p-2 bg-white rounded-md shadow-md justify-items-center bg-opacity-10'>
+          <img src={favSong[0].imageURL} referrerPolicy='no-referrer' className='object-cover col-span-1 rounded lg:w-52 lg:h-52'/>
+          <div className='flex items-center justify-between w-full col-span-1 gap-1'>
+            <div>
+              <div className='text-3xl font-semibold'>{favSong[0].name}</div>
+              <div className='font-medium'>{favSong[0].artist}</div>
+              <div>Total song played : </div>
+            </div>
+            <div className='font-semibold text-8xl text-end'>{favSong[0].songPlayed}</div>
+          </div>
+        </div>
+      }
+    </div>
+  )
+}
 
 export default DashboardHome

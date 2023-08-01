@@ -10,8 +10,6 @@ import DashboardUserCard from './DashboardUserCard';
 const DashboardUsers = () => {
   const [{ allUsers }, dispatch] = useStateValue();
 
-  const [isMobile, setMobile] = useState(window.innerWidth < 700);
-
   useEffect(() => {
     if (!allUsers) {
       getAllUsers().then((data) => {
