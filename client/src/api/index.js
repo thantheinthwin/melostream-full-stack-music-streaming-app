@@ -120,6 +120,15 @@ export const removeSong = async (songId) => {
     }
 };
 
+export const songPlayed = async (songId) => {
+    try {
+        const res = await axios.get(`${baseURL}api/songs/songPlayed/${songId}`)
+        return res.data;
+    } catch (error) {
+        return null;
+    }
+}
+
 export const removeAlbum = async (albumId) => {
     try {
         const res = await axios.delete(`${baseURL}api/albums/delete/${albumId}`);

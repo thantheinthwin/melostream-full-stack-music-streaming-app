@@ -15,6 +15,7 @@ import { HiOutlineMusicalNote } from 'react-icons/hi2';
 
 const DashboardHome = () => {
   const [{allUsers, allSongs, allArtists, allAlbums}, dispatch] = useStateValue();
+  const currentMonth = new Date().getMonth();
 
   useEffect(() => {
     if(!allUsers){
@@ -52,8 +53,41 @@ const DashboardHome = () => {
         })
       })
     }
-  },[])
+  }, []) 
 
+  console.log(allUsers.map(user => user.createdAt).filter(dateString => {
+    const date = new Date(dateString);
+    return date.getMonth() === currentMonth;
+  }).length);
+
+  return (
+    <div className='flex flex-col items-center w-full col-span-6 gap-8 p-6 mt-10 lg:col-start-2'>
+      <Tabs allUsers={allUsers} allArtists={allArtists} allSongs={allSongs} allAlbums={allAlbums}/>
+      <div className='grid w-5/6 grid-cols-2 gap-6'>
+        <div className='flex flex-col items-center justify-center p-2 rounded-md bg-neutral-600'>
+          <span className='text-xl font-semibold'>Subscribed users</span>
+          <span className='text-6xl font-semibold'>{allUsers.filter(user => user.subscription == true).length}</span>
+        </div>
+        <div className='flex flex-col items-center justify-center p-2 rounded-md bg-neutral-600'>
+          <span className='text-xl font-semibold'>Monthly New User</span>
+          <span className='text-6xl font-semibold'>
+            {
+              allUsers
+              .map(user => user.createdAt)
+              .filter(dateString => {
+                const date = new Date(dateString);
+                return date.getMonth() === currentMonth;
+              }).length
+            }
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const Tabs = ({allUsers, allArtists, allSongs, allAlbums}) => {
+  
   const tags = [
     {
       id: 1,
@@ -114,7 +148,7 @@ const DashboardHome = () => {
       initial="hidden"
       animate="show"
       exit="exit"
-      className="relative grid items-center w-full grid-flow-row col-span-6 p-6 mt-20 justify-evenly gap-x-3 gap-y-5 lg:col-start-2 lg:grid-flow-col"
+      className="relative grid items-center w-full grid-flow-row col-span-6 justify-evenly gap-x-3 gap-y-5 lg:col-start-2 lg:grid-flow-col"
     >
       {tags.map((tag, i) => (
         <motion.div variants={item} key={i}>
@@ -126,10 +160,10 @@ const DashboardHome = () => {
         </motion.div>
       ))}
     </motion.div>
-  );
+  )
 }
 
-export const DashboardCard = ({ icon, name, count }) => {
+const DashboardCard = ({ icon, name, count }) => {
   return (
     <div className="grid w-40 h-auto grid-flow-col grid-rows-2 gap-2 p-4 rounded-md cursor-default bg-neutral-700 rouned-lg bg-sky-blue-50 hover:shadow-lg">
       <i className="text-3xl">{icon}</i>

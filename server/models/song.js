@@ -27,6 +27,9 @@ const songSchema = mongoose.Schema(
         genre: {
             type: String,
             required: true
+        },
+        songPlayed: {
+            type: Number,
         }
     },
     { timestamps: true }

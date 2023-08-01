@@ -11,18 +11,17 @@ import { MdOutlineArrowBackIos } from 'react-icons/md'
 import { CreditCard } from '../assets/img';
 import { purchase } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { subscribe } from '../utils/analytics';
 
 const Subscribe = () => {
   const [{user}, dispatch] = useStateValue();
   const [selectedOption, setSelectedOption] = useState(null);
-  const [productId, setProductId] = useState(null);
   const [clicked, setClicked] = useState(false);
 
   const navigate = useNavigate();
 
   const onValueChange = (e) => {
     setSelectedOption(e.target.value);
-    setProductId(e.target.id)
   }
 
   useEffect(()=>{
@@ -35,6 +34,7 @@ const Subscribe = () => {
   },[user])
 
   // console.log(selectedOption);
+  // console.log(user);
   return (
     <div className="flex h-full max-h-[calc(100%-7rem)] w-full overflow-y-scroll p-2 md:items-center md:overflow-y-hidden md:p-4 lg:max-h-[calc(100%-2rem)]">
       {user?.user?.subscription && (
@@ -177,6 +177,7 @@ const Subscribe = () => {
                       break;
                   }
                   setClicked(true);
+                  subscribe(user);
                 } else {
                   alert("Choose a plan");
                 }

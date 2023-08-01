@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Artist1, Artist2, Artist3, Artist4, HeroImg1, HeroImg2, HeroImg3, HeroImg4, PricingPic, ProcessImg1, ProcessImg2, ProcessImg3, ProcessImg4 } from '../assets/img'
 
@@ -10,8 +10,9 @@ import { ImFacebook, ImTwitter } from 'react-icons/im'
 import { FaInstagram } from 'react-icons/fa'
 
 import { LandingPageHeader } from '../components'
+import { pageVisit } from '../utils/analytics'
 
-const landingPage = () => {
+const LandingPage = () => {
   const contact = [
     {
       icon: <BsTelephone/>,
@@ -42,6 +43,10 @@ const landingPage = () => {
     }
   ]
   
+  useEffect(()=>{
+    pageVisit();
+  },[])
+
   return (
     <div className='relative'>
       <LandingPageHeader />
@@ -412,4 +417,4 @@ const landingPage = () => {
 }
 
 
-export default landingPage
+export default LandingPage

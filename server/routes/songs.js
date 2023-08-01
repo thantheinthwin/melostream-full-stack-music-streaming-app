@@ -76,6 +76,7 @@ router.put('/update/:id', async (req, res) => {
                 artist: req.body.artist,
                 language: req.body.language,
                 genre: req.body.genre,
+                songPlayed: 0
             },
             options
         );
@@ -85,6 +86,35 @@ router.put('/update/:id', async (req, res) => {
         return res.status(400).send({ success: false, msg: error }); 
     }
 });
+
+// songPlayed
+router.get('/songPlayed/:id', async (req, res) => {
+    const filter = {_id: req.params.id};
+
+    const options = {
+        upsert: true,
+        new: true
+    };
+
+    const data = await song.findOne(filter);
+
+    if (data){
+        const count = data.songPlayed;
+        try {
+            const result = await song.findOneAndUpdate(
+                filter,
+                {
+                    songPlayed: count + 1,
+                }
+            )
+            return res.status(200).send({user: result})
+        } catch (error) {
+            return res.status(400).send({ success: false, msg: error }); 
+        }
+    }else{
+        return res.status(400).send({success: false, msg: 'Data not found'})
+    }
+})
 
 // Delete
 router.delete('/delete/:id', async (req, res) => {

@@ -9,6 +9,7 @@ import { removeSong } from '../../api';
 import { actionType } from '../../context/reducer';
 import { useStateValue } from '../../context/StateProvider';
 import { deleteFileObject } from '../supportFunctions';
+import { playSong } from '../../utils/analytics';
 
 const SongCard = ({data, index}) => {
   const [isDeleteConfirm, setDeleteConfirm] = useState(false);
@@ -58,6 +59,8 @@ const SongCard = ({data, index}) => {
         showMusicPlayer: true,
       })
     }
+
+    playSong(data._id, data.name);
   }
 
   useEffect(()=>{
