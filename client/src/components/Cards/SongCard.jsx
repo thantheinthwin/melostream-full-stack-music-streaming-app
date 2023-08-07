@@ -10,12 +10,15 @@ import { actionType } from '../../context/reducer';
 import { useStateValue } from '../../context/StateProvider';
 import { deleteFileObject } from '../supportFunctions';
 import { playSong } from '../../utils/analytics';
+import { useNavigate } from 'react-router-dom';
 
 const SongCard = ({data, index}) => {
   const [isDeleteConfirm, setDeleteConfirm] = useState(false);
   const [{allSongs, isSongPlaying, songIndex, showMusicPlayer}, dispatch] = useStateValue();
   const [isDashboardBranch, setDashboardBranch] = useState('');
   const [isArtist, setIsArtist] = useState('');
+
+  const navigate = useNavigate();
 
   const deleteSong = (songId, songURL, imageURL) => {
     deleteFileObject(songURL)
@@ -86,7 +89,7 @@ const SongCard = ({data, index}) => {
             />
           </div>
           <p className="text-base font-medium text-center">
-            {data.name.length > 10 ? `${data.name.slice(0, 10)}...` : data.name}
+            {data.name.length > 15 ? `${data.name.slice(0, 15)}...` : data.name}
             <span className="block text-sm font-light">
               {data.artist.length > 15
                 ? `${data.artist.slice(0, 15)}...`
@@ -130,6 +133,10 @@ const SongCard = ({data, index}) => {
                     className="row-span-1 p-2 text-center text-white transition-all duration-200 ease-in-out bg-green-500 rounded-lg hover:bg-green-600 hover:shadow-md"
                     onClick={() => {
                       deleteSong(data._id, data.songURL, data.imageURL);
+                      if(window.location.pathname.split("/").some(path => path == "mysongs")){
+                        navigate("/user/home", {replace: true})
+                        navigate(0)
+                      }
                     }}
                   >
                     Yes
