@@ -163,14 +163,16 @@ const Subscribe = () => {
                       purchase(user?.user?.user_id).then(() => {
                         console.log(user?.user?.user_id);
                         navigate('/user/home', {replace: true})
-                        window.location.assign('https://buy.stripe.com/test_9AQ02Vb9cf3x4a4144')
+                        // window.location.assign('https://buy.stripe.com/test_9AQ02Vb9cf3x4a4144')
+                        window.open('https://buy.stripe.com/test_9AQ02Vb9cf3x4a4144', ' _blank')
                       });
                       break;
                     case 'premium':
                       purchase(user?.user?.user_id).then(() => {
                         console.log(user?.user?.user_id);
                         navigate('/user/home', {replace: true})
-                        window.location.assign('https://buy.stripe.com/test_6oE3f7dhk6x1dKEbIJ')
+                        // window.location.assign('https://buy.stripe.com/test_6oE3f7dhk6x1dKEbIJ')
+                        window.open('https://buy.stripe.com/test_6oE3f7dhk6x1dKEbIJ', ' _blank')
                       });
                       break;
                     default:

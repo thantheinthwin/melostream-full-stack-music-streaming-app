@@ -22,8 +22,6 @@ const ArtistCard = ({data, index}) => {
         });
     }
     
-    console.log();
-    
     return (
       <AnimatePresence>
         <motion.div className="relative grid items-center grid-flow-col grid-cols-5 col-span-1 gap-2 p-2 rounded-md shadow-md cursor-pointer bg-neutral-900 lg:col-span-2">

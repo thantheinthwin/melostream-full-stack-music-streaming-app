@@ -15,7 +15,7 @@ import { HiOutlineMusicalNote } from 'react-icons/hi2';
 
 const DashboardHome = () => {
   const [{allUsers, allSongs, allArtists, allAlbums}, dispatch] = useStateValue();
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date().getMonth()-1;
 
   useEffect(() => {
     if (!allUsers) {

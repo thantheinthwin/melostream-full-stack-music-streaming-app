@@ -86,7 +86,7 @@ const SongCard = ({data, index}) => {
             />
           </div>
           <p className="text-base font-medium text-center">
-            {data.name.length > 15 ? `${data.name.slice(0, 15)}...` : data.name}
+            {data.name.length > 10 ? `${data.name.slice(0, 10)}...` : data.name}
             <span className="block text-sm font-light">
               {data.artist.length > 15
                 ? `${data.artist.slice(0, 15)}...`

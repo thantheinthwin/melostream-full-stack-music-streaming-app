@@ -121,7 +121,7 @@ const DashboardUserCard = ({data, index, item}) => {
           <motion.div variants={item} key={index}>
             <div className="relative z-30 grid items-center grid-flow-col grid-cols-4 p-2 rounded-sm cursor-pointer bg-neutral-900 col-span-full">
               <img
-                src={data.imageURL}
+                src={data.imageURL ? data.imageURL : defaultImageURL}
                 alt={data._id}
                 className="object-cover w-10 h-10 col-span-1 bg-blue-100 rounded-md shadow-md justify-self-center"
               />

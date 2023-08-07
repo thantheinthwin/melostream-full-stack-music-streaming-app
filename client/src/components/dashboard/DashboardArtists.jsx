@@ -77,7 +77,7 @@ const DashboardArtists = () => {
         <div className="p-2 text-sm text-gray-400 col-span-full">
           You have {filteredArtists ? filteredArtists?.length : allArtists?.length} artists in the database.
         </div>
-        <ArtistContainer data={filteredArtists ? filteredArtists : allArtists} />
+        {allSongs && <ArtistContainer data={filteredArtists ? filteredArtists : allArtists} />}
       </div>
     </div>
   )
