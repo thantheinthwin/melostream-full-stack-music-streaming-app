@@ -15,6 +15,7 @@ router.post('/save', async(req, res) => {
             artist: req.body.artist,
             language: req.body.language,
             genre: req.body.genre,
+            songPlayed: 0
         }
     );
 
