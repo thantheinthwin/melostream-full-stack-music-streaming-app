@@ -37,11 +37,34 @@ const MobileNav = () => {
     ]
     
   return (
-    <div className='absolute bottom-0 z-50 flex w-screen justify-evenly bg-neutral-800'>
-        {nav.map((item, i) => <NavLink key={i} to={item.path} className={({isActive}) => isActive ? isActiveMobileNav : isNotActiveMobileNav}><i className='text-2xl'>{item.icon}</i><span className='text-sm'>{item.text}</span></NavLink>)}
-        {isArtist && <NavLink to='/user/upload' className={({isActive}) => isActive ? isActiveMobileNav : isNotActiveMobileNav}><i className='text-2xl'><AiOutlinePlus/></i><span className='text-sm'>Upload</span></NavLink>}
+    <div className="absolute bottom-0 z-50 flex w-screen justify-evenly bg-neutral-800">
+      {nav.map((item, i) => (
+        <NavLink
+          key={i}
+          to={item.path}
+          className={({ isActive }) =>
+            isActive ? isActiveMobileNav : isNotActiveMobileNav
+          }
+        >
+          <i className="text-2xl">{item.icon}</i>
+          <span className="text-sm">{item.text}</span>
+        </NavLink>
+      ))}
+      {isArtist && (
+        <NavLink
+          to="/user/upload"
+          className={({ isActive }) =>
+            isActive ? isActiveMobileNav : isNotActiveMobileNav
+          }
+        >
+          <i className="text-2xl">
+            <AiOutlinePlus />
+          </i>
+          <span className="text-sm">Upload</span>
+        </NavLink>
+      )}
     </div>
-  )
+  );
 }
 
 export default MobileNav
